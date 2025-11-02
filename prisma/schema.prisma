@@ -1,0 +1,118 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String     @id @default(uuid())
+  email     String     @unique
+  username  String
+  schedules Schedule[]
+  quizAttempts QuizAttempt[]  // Add this
+  createdAt DateTime   @default(now())
+}
+
+model Schedule {
+  id               String     @id @default(uuid())
+  title            String
+  userId           String
+  user             User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  remindersEnabled Boolean    @default(false) 
+  startDate        DateTime?
+  planItems        PlanItem[]    
+  createdAt        DateTime   @default(now())
+  updatedAt        DateTime   @updatedAt
+}
+
+model PlanItem {
+  id         String     @id @default(uuid())
+  scheduleId String
+  schedule   Schedule   @relation(fields: [scheduleId], references: [id], onDelete: Cascade)
+  range      String     // e.g., "Day 1: 9:00am - 11:30am"
+  topic      String     // e.g., "Introduction to Organic Chemistry"
+  subtopics  Subtopic[]
+  quiz       Quiz?
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+}
+
+model Subtopic {
+  id         String   @id @default(uuid())
+  planItemId String
+  planItem   PlanItem @relation(fields: [planItemId], references: [id], onDelete: Cascade)
+  title      String   // t in your JSON
+  completed  Boolean  @default(false)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+model Quiz {
+  id         String     @id @default(uuid())
+  planItemId String     @unique
+  planItem   PlanItem   @relation(fields: [planItemId], references: [id], onDelete: Cascade)
+  title      String
+  questions  Question[]
+  attempts   QuizAttempt[]  // Add this
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+}
+
+model Question {
+  id         String   @id @default(uuid())
+  quizId     String   
+  quiz       Quiz     @relation(fields: [quizId], references: [id], onDelete: Cascade)
+  question   String
+  options    Option[]
+  correctAnswer String  // Store which option is correct (e.g., "A", "B", "C", "D" or the option id)
+  // explanation String? v2 features
+   userAnswers   UserAnswer[] // Add this
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+model Option {
+  id         String   @id @default(uuid())
+  questionId String
+  question   Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  label      String   // e.g., "A", "B", "C", "D"
+  content    String   // The actual option text
+  userAnswers UserAnswer[] 
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+model QuizAttempt {
+  id            String       @id @default(uuid())
+  quizId        String
+  quiz          Quiz         @relation(fields: [quizId], references: [id], onDelete: Cascade)
+  userId        String
+  user          User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  score         Int          // Number of correct answers
+  totalQuestions Int         // Total questions in quiz
+  percentage    Float        // score / totalQuestions * 100
+  answers       UserAnswer[]
+  startedAt     DateTime     @default(now())
+  completedAt   DateTime?    // null until quiz is submitted
+  timeTaken     Int?         // seconds taken to complete
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+}
+
+model UserAnswer {
+  id               String      @id @default(uuid())
+  attemptId        String
+  attempt          QuizAttempt @relation(fields: [attemptId], references: [id], onDelete: Cascade)
+  questionId       String
+  question         Question    @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  selectedOptionId String?     // null if skipped
+  selectedOption   Option?     @relation(fields: [selectedOptionId], references: [id], onDelete: SetNull)
+  isCorrect        Boolean
+  createdAt        DateTime    @default(now())
+}

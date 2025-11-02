@@ -1,0 +1,221 @@
+This is the database schema: 
+   model User {
+  id        String     @id @default(uuid())
+  email     String     @unique
+  username  String
+  schedules Schedule[]
+}
+
+model Schedule {
+  id        String       @id @default(uuid())
+  title     String
+  userId    String
+  user      User         @relation(fields: [userId], references: [id])
+  planItems PlanItem[]
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
+}
+
+model PlanItem {
+  id         String      @id @default(uuid())
+  scheduleId String
+  schedule   Schedule    @relation(fields: [scheduleId], references: [id])
+  range      String      // e.g., "Day 1(10am - 3pm)"
+  topic      String      // e.g., "Introduction to Organic Chemistry"
+  subtopics  Subtopic[]
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+}
+
+model Subtopic {
+  id        String   @id @default(uuid())
+  planItemId String
+  planItem   PlanItem @relation(fields: [planItemId], references: [id])
+  title     String    // t in your JSON
+  completed Boolean   @default(false)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+So as you can see the user can have mutiple schedules with different planItem so i want to you to take note of the range topic and the subtopics,only one schedule can have it reminder on per user you can not have more than one schedule on,you can turn it off and on another but you can have two or more simultaneously on.
+
+this is the toggle function for it: 
+  async function toggleReminders(scheduleId: string, enable: boolean) {
+    if (!email) return;
+    setError(null);
+    setLoading(true);
+    try {
+      const res = await fetch("/api/reminders", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          scheduleId,
+          enable,
+          to: email,
+          subject: enable ? "Study Reminder" : "Reminders Disabled",
+          message: enable ? "Time to study!" : "Reminders have been disabled."
+        })
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Failed to toggle reminders");
+      await fetchUserSchedules();
+    } catch (err: any) { setError(err.message); } finally { setLoading(false); }
+  }
+
+
+this is the api we want to use the cron job:import { NextResponse } from "next/server";
+import { studyPlannerAgent } from "@/mastra/agents";
+
+export async function POST(request: Request) {
+  try {
+    const body = await request.json();
+    const {  } = body ?? {};
+
+
+    // Use the agent to send reminder
+     await studyPlannerAgent.generateVNext([
+      {
+        role: "user",
+        content: ``
+      }
+    ]);
+
+    return NextResponse.json({ success: true }, { status: 200 });
+  } catch (error) {
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+  }
+}
+
+
+this is the tool: import { createTool } from "@mastra/core";
+import { mistral } from "@ai-sdk/mistral";
+import { generateText } from "ai";
+import { getJson } from "serpapi";
+import { z } from "zod";
+import {Resend} from "resend";
+
+const model = mistral("mistral-small-latest");
+
+// 🔍 Web search helper
+type SiteLink = {
+  title: string;
+  link: string;
+  snippet?: string;
+};
+
+type SearchResult = {
+  position: number;
+  title: string;
+  link: string;
+  snippet: string;
+  favicon?: string;
+  sitelinks?: SiteLink[];
+};
+
+const search_web = async (query: string): Promise<SearchResult[]> => {
+  try {
+    const json = await getJson({
+      api_key: process.env.SERP_API_KEY,
+      engine: "duckduckgo",
+      q: query,
+      kl: "us-en",
+    });
+
+    const organicResults = (json.organic_results || []).slice(0, 3);
+
+    const results: SearchResult[] = organicResults.map((r: any) => ({
+      position: r.position,
+      title: r.title ?? "Untitled",
+      link: r.link ?? "",
+      snippet: r.snippet ?? "",
+      favicon: r.favicon ?? "",
+      sitelinks: (r.sitelinks || []).slice(0, 3).map((s: any) => ({
+        title: s.title ?? "",
+        link: s.link ?? "",
+        snippet: s.snippet ?? "",
+      })),
+    }));
+
+    return results;
+  } catch (err) {
+    console.error("search_web error:", err);
+    return [];
+  }
+};
+
+// 💬 Prompt generator
+function generatePrompt(username: string, currentSubTopic: string) {
+  return `
+You are a motivational AI study coach.
+Write a short motivational email (4–6 lines) to ${username} encouraging them to stay focused while studying the topic "${currentSubTopic}". 
+Keep the tone friendly and inspiring, and end with a short reminder like "Let's make progress today!".
+`;
+}
+
+export const studyReminderTool = createTool({
+  id: "study-reminder-tool",
+  description: "Sends a motivational plain text email reminder to the user.",
+  inputSchema: z.object({
+    username: z.string(),
+    email: z.string(),
+    currentSubTopic: z.string(),
+  }),
+  outputSchema: z.object({
+    success: z.boolean(),
+  }),
+  execute: async ({ context }) => {
+    const { username, email, currentSubTopic } = context;
+
+    // ✨ Generate motivational message
+  const prompt = generatePrompt(username, currentSubTopic);
+
+let motivationalText = "Stay focused — you’re doing great! Every small effort compounds.";
+try {
+  const { text } = await generateText({
+    model,
+    prompt,
+    maxOutputTokens: 800,
+  });
+  if (text) motivationalText = text.trim();
+} catch (err) {
+  console.error("Error generating motivational text:", err);
+}
+const resend = new Resend(process.env.RESEND_API_KEY);
+
+    // 🔎 Search for helpful resources
+   const links = await search_web(currentSubTopic);
+   const formattedLinks = links
+  .map((r, i) => {
+    const mainLink = `${i + 1}. ${r.title}\n${r.link}`;
+    const subLinks =
+      r.sitelinks && r.sitelinks.length > 0
+        ? r.sitelinks.map((s, j) => `   - ${s.title}\n     ${s.link}`).join("\n")
+        : "";
+    return [mainLink, subLinks].filter(Boolean).join("\n");
+  })
+  .join("\n\n");
+    // 📧 Create email content
+    const subject = `Keep pushing, ${username}! Let's conquer ${currentSubTopic} 💪`;
+    const body = `
+Hey ${username},
+
+${motivationalText.trim()}
+
+📘 Helpful study resources:
+${formattedLinks || "No links found today — focus on your notes and stay consistent!"}
+
+Let's make progress today 🚀
+`;
+
+    // ✉️ Send email
+
+    const mailOptions = {
+      from: 'onboarding@resend.dev',
+      to: email,
+      subject,
+      text: body,
+    };
+resend.emails.send(mailOptions);
+    return { success: true };
+  },
+});

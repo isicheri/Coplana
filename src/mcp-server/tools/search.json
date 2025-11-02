@@ -1,0 +1,719 @@
+{
+"search_metadata":
+{
+"id":
+"68fbfcdaccb1e93802766985",
+"status":
+"Success",
+"json_endpoint":
+"https://serpapi.com/searches/4139098cc9add99f/68fbfcdaccb1e93802766985.json",
+"created_at":
+"2025-10-24 22:25:30 UTC",
+"processed_at":
+"2025-10-24 22:25:30 UTC",
+"duckduckgo_url":
+"https://duckduckgo.com/?q=best+resource+to+find+Basic+concepts+and+scope+of+organic+chemistry&kl=us-en",
+"raw_html_file":
+"https://serpapi.com/searches/4139098cc9add99f/68fbfcdaccb1e93802766985.html",
+"prettify_html_file":
+"https://serpapi.com/searches/4139098cc9add99f/68fbfcdaccb1e93802766985.prettify",
+"total_time_taken":
+1.78
+},
+"search_parameters":
+{
+"engine":
+"duckduckgo",
+"q":
+"best resource to find Basic concepts and scope of organic chemistry",
+"kl":
+"us-en"
+},
+"search_information":
+{
+"organic_results_state":
+"Results for exact spelling"
+},
+"ads":
+[
+{
+"position":
+1,
+"title":
+"Organic Chemistry Homework Help - #1 Answer AI Solver",
+"link":
+"https://duckduckgo.com/y.js?ad_domain=smartsolve.ai&ad_provider=bingv7aa&ad_type=txad&click_metadata=2vMh7_x9M5LjDY_kCeV3k22DXDSf5DptDqRTjZAOODkmrLXHgndobzK74ch2ipx_jfyXSuADKw9w8HE%2Dm%2DUl8oN6dwgyTW_xyw%2DcRR67nsz96Wtq1kMQTKU1%2DfWDfhA9.y964CuL675b_E6RWrhOYVw&eddgt=KWcvKKe6_YUb5PKPXo2GJw%3D%3D&rut=6be472579f734d2cdef7d62ed110c1042c016fb4c10e7f1079b60746af0659e5&u3=https%3A%2F%2Fwww.bing.com%2Faclick%3Fld%3De8eZ1_1O258synisgIK2CGODVUCUyvPvb7qrz9J2GigdWm5oYgOOEZJas1p7lUaQxV2BOvvx8526_Mh08U4%2DkEX7pWnO7IuQgu523HB7dwiZd9jGQyqx1LkDGEgpiSuMGBKIG4nlIosws9O%2Dd%2Dvr2Id1o6rqN6z8%2DIBvegclHm0ql7o8TkzDtNsmvMEAwq35uJFMts%2DGRK_QPff7QJTdXGVO1AZ7qLCAf5iJkWmiAHOMLkiRlQLp9XYQOQYtbeR1DUCRJ5qluQzRwG13I3otNE9f_ZgiZoHCg6OlPbuIMr9wdAs%2DhceXzcPevbK0N1dtCS2PhkMB4dC0lX7%2DSVVzPzKClcQCCIg1w3nA6PNn_NUV2oDW5ZaTcVgpc6jr2Zah8unKFjk6XEJA91_sZzI12gsV9SJLbiht5DqsIrYbqUT0E6uSdoKE4x1g14cQ_lymX2ssFB6KCFs7j2o0yyhf5q8m5DuCqMbNuRkqz9MmhiTOp4Wd09Kc5uhfdZuoZ8LvHbYm%2Dr08ueh4qUT1sU4PWOswxFpoHYz8mzckn2_rb5My6MsH5BohUeMSwdgRLr5nvbQnXgwU3LboR9druIGq7txIaQrXTO95%2DRSc9s_zrIQPDdNB0jovNqwnQYa_JWdGDW5nzbticR3qjexo3Tb4dvWCn1kWeVSdGjcAXGXQhWoNZwvJ1RfspPBuJLkT78I1hEldMsNWjJsGqhM6JlD_JnN48RdO6l78PakwYNDf2suw66ke2HH25KfjV7YNfK9nmO9amFhQ%26u%3DaHR0cHMlM2ElMmYlMmZzbWFydHNvbHZlLmFpJTNmc3NyZiUzZGJuZy1iJTI2c3NrdyUzZG9yZ2FuaWMlMjUyMGNoZW1pc3RyeSUyNTIwaG9tZXdvcmslMjUyMGhlbHAlMjZtc2Nsa2lkJTNkNDlkZGViMzdhZjRlMTk4Y2Q5NGE4M2NjNTM5NWM5OTc%26rlid%3D49ddeb37af4e198cd94a83cc5395c997&vqd=4-68741804393053552000808579428938769486&iurl=%7B1%7DIG%3DC0BA40FABFC646C6AC08B5C085CF2851%26CID%3D3ABA777EAC1B6E0F00BF61F1AD826FA3%26ID%3DDevEx%2C5048.1",
+"source":
+"smartsolve.ai",
+"snippet":
+"Organic Chemistry Homework Help. Get A+ solutions to your questions in all subjects. Powered By AI with a 98.97% accuracy on any question",
+"sitelinks":
+[
+{
+"title":
+"Get Answers",
+"link":
+"https://duckduckgo.com/y.js?ad_domain=smartsolve.ai&ad_provider=bingv7aa&ad_type=txad&click_metadata=B9e7IfKOpMT8hX2jflcaonuSv2CoaVQATzbKTGVV3zWqjzn0SVhhNjcejwkqwXi1KxCU9dj6Km_vciSiKwsrqxVlTYOQ2fAdqaM6zhIUVQ0g4ggHWlKE7p0pDLKEJnjw.xhLmsa2J6Wzjbo5RfFlpLg&eddgt=KWcvKKe6_YUb5PKPXo2GJw%3D%3D&rut=859d027e3fc56521c15bf819c23b1dfee9ad6e1189923d6da7e64d7d3cdafb39&u3=https%3A%2F%2Fwww.bing.com%2Faclick%3Fld%3De8J%2DRx5n8P9lwsHJDKZcJpojVUCUy23JCYjHfCp0btPJuBrAdRqQO0Ss9hwH0l__YIIHy4RpexpgQ%2DPC39JUKO3i28PB04fiv7lmIS4lAmJBWsBjbgDl6GD5_LwnnEiu0bu%2DBze2I3W7OCdgC2PSLPYJaru0jzKcAphf1zdvg4huJDLU9ZDVHnGVQFxDvl4ry3uPoVgcEiEaE2Po2A9pxwDK8Uf8CEs31Wpm9mmx_7gQ15dchD4yDdoh3vhVC5bFRqdWRuOH65ezVk5lGlYYM14GjXu5e29xBu1Uq71ZVDZcdUD7aPOFq4XCgQfoXSLB0frH8qMdPdE6lRQEo3AKsJ0F1FAnLZ2fnQnVtX1z78dReFv1H7dPxmb8_xIq7R4_9RXIZXXIiZNHB6wzZmfB9UkPMjXmARORdOukQvp4xGsk7P9SVg_bDpk7tt1kyRzjkd6oHzPoMDHnpF2D2cfWs2Cp0V0Ta1ljIq1rEVaYQmcVh21RU_m6Ljx5HOkB1gMWGv23RL7KlU74bgPgqBxkJ0wc3Dae308qy%2DsSAj06IAHO7YH3O2AiLRlF2RpyMV66KlY%2D8Rv8M_CO9JiDK7qHslD14_FJBWMEKwhrgbmlAwGZbdO8RbLNrF3qUg6VOUWGBBGietvVgaiMFuD7qb0vUJ3eW_yvJbc3_8ELCIR2b2JBfnI%2DuWz1Yi7LJ1RRz2ASA0yxYEeaawfWWtE9gCj9SxJpi8xPZ_FP6Kk55ZVz0y92DJSWGWydnruv7IeAdnpBM%2DJ%2DEMEPM5vRfwfpYfhIWqqfmuGXs%26u%3DaHR0cHMlM2ElMmYlMmZzbWFydHNvbHZlLmFpJTNmc3NyZiUzZGJuZyUyNm1zY2xraWQlM2Q5N2ExNzA4N2RmYjUxMjA1MmM2MjE4N2MyMzZlNGRmNA%26rlid%3D97a17087dfb512052c62187c236e4df4&vqd=4-239586956813189286787625614342391459935&iurl=%7B1%7DIG%3DC0BA40FABFC646C6AC08B5C085CF2851%26CID%3D3ABA777EAC1B6E0F00BF61F1AD826FA3%26ID%3DDevEx%2C5053.1"
+},
+{
+"title":
+"AI Homework Solver",
+"link":
+"https://duckduckgo.com/y.js?ad_domain=smartsolve.ai&ad_provider=bingv7aa&ad_type=txad&click_metadata=sEZxd3xd6jThPXvsTiekd0eMdFYxU0dqCZRkKh47rCChFCEQmeQZ16wazcZiE8n5If5Kp5S_sINeL46ovZXsN80WWniCN8NGzXiez6A2WHWaVPhuH2TT8zL2reZHm2hr.4R37iC3vhCDCssTunDBNbg&eddgt=KWcvKKe6_YUb5PKPXo2GJw%3D%3D&rut=79827183f02eed855a70295c0a1d31baf83fdcdba0fea25ecfb83fce2a0cf272&u3=https%3A%2F%2Fwww.bing.com%2Faclick%3Fld%3De8IGv6c_bR_lBCvh%2DMSOE4JzVUCUzpKrPlWeF3i7znOPhjgKm0WRnOHF5BVcMNexES9bsUYZcQxaS9I2oLNxurqJR0Cop9it6RcXcEoU7F5pCZeUKHQr0byc2ILyu%2D4qNTitcfrtXyrG_S6DMUuBQEkG9cvHevPpqZfCqTuAEX4MRVcXo6d2Yg5DvP2QvH2j82oTvJ3NennxghX5mTrdEGLmenzjv0R6lNPUt9C6FCYVpmhxwoagHQoVdGipIT3520xVy7qaxfR56q4P_Y4pGhaLCEyLANUW7fj31jdLZ0xpPiuV3z8nz1CQhqbPqr2dnS9qAXmQ_CTG6l5O%2DPTYEy1cR_jtLYPNT7nbBOu70rUZ6skBPqsIcjUeXyDozota_lhE0zv52LufF1M_LZajTL5x2y4WuTnLR5RNLuvq_lFrswuHDJ9KwbCq5GNZNPvh%2DIqN2odZ2wAI0bmAawaqYzxUYqxSknftVwVqVa4_A4hnqtcRWDNhJMpIudd0P8FZEIekTpptN6noufpKnbVwtZurWPLllMhuNx53NnXUwVYCn_n7O5uLDGLuCuBTtDGHS4tvUxWadw6p_DQ7eRFFyMmXn1zAxbtx1E53hgE0Gcq7H18D5bJD3yJgi_jV3Wj601MWmfTsmqE8TX0FefSAIK6DuTiS5hY0nudA6HZmxm5RCI5OciIH1PjxtG_CEIYdVwe3xxNZxyHCfk3b09rPSHE5_7oN3C9X40gh_9f9%2DnWp5pkROjvYXOvVU76E6p2C0FkeO6LAJF77VKWTJlrq0LL2r9PRg%26u%3DaHR0cHMlM2ElMmYlMmZzbWFydHNvbHZlLmFpJTNmbXNjbGtpZCUzZGUxYzQ3NGY5MzcyMzFjNTQ1NjQyMWMwMmNiZjhhZDUw%26rlid%3De1c474f937231c5456421c02cbf8ad50&vqd=4-198096510861000379131301676528006302155&iurl=%7B1%7DIG%3DC0BA40FABFC646C6AC08B5C085CF2851%26CID%3D3ABA777EAC1B6E0F00BF61F1AD826FA3%26ID%3DDevEx%2C5055.1"
+},
+{
+"title":
+"AI Homework And Math...",
+"link":
+"https://duckduckgo.com/y.js?ad_domain=smartsolve.ai&ad_provider=bingv7aa&ad_type=txad&click_metadata=kyXbE9bcwy277vqXPaX4fakamb2ODLuq5HMRjtEZ1ifn6dfQu0CImEvCNm9btev91JDz38rlwyIi7Zw7EBo89%2DrBR1CYdNOgOtVFY01zwmhCWE0JB7xVzvNagZtZ56Rg.nzlgLzb3RAbq3FYkc7%2D5bw&eddgt=KWcvKKe6_YUb5PKPXo2GJw%3D%3D&rut=d208c78265ca2540427d8f7ca542ea949d8df472af4b9e8c6751b5744d69662c&u3=https%3A%2F%2Fwww.bing.com%2Faclick%3Fld%3De8wMolruIyoTAEtwZ%2DdQ8aWzVUCUzGbEogll32L%2DjAr2ol1Das3%2DJymbjisS0SGsQQqIvdRLpY35VhyDYZcoxmO%2DOEz0J5HbytpDpzWGi5HGoXD6qiVbP57crnd936pFE%2Dd6CsclaNBWMSgcT0LXVXh4ub2aZmwLK3jCgnxHbjX5hNVkeQySrGzV4ttK0g1dZ5LhdKvaPW4x5OA_AvfBoqakeEovIT3F0NFkEWHBB7JwoHafv80X6%2DXPrXQb8hHJwvNtAFvr9z5pM%2Dyun5NYBXLh3ni8N19Tv7miXfryK5PAHcNyZ1VeI8INymVMtYEtMq%2DBKqiTGmEHqVJMqO2hlnEg0VRs31RE%2DDLXTQ_6pfJnFd6_1iJIzM1etnZsw3sC6yO3QjavElcTEmd9Lqajae8b9ZPqSdpQoCKApfT6YWTA9GTe%2DmZkn9o0mcMgnUT1e4FT0B1f5Z_k5iVB9Zv2JHIoz1mzf8pacmJGzzewX0vXnFWxBMglkwwfbTnV3tHwV5h5zORCCv8LHT7v8Y8BTZIdWhLtfOgARJ0P8tRR7DjtzUpOtBSv6%2D1FwVxY4%2DYhRES%2Dq_%2D2cpj6S6i9bkgeKj8GpJ9UynuV7jjW9o0yeMJomTKT3uH0A0PoXZoNrf%2DaQMcZEAZeLVSjlDkerBVHc6wp30dc9iTNv_M43rM_mdJwJJmJ1xBde%2D4rvBUmAmFmGHprBUraL1iGeV_KkvecDQbRKRHI3APVUCtIr6nQyz8P52626RKqBHU__EniOLQEoVjv%2D0kMBiN5h0Qax61ABlJrISjMY%26u%3DaHR0cHMlM2ElMmYlMmZzbWFydHNvbHZlLmFpJTJmZnIlM2Ztc2Nsa2lkJTNkNDNjNjFiYzc5MDMyMTVhOGQ0Mjg3MzNjNmNlOTEzODc%26rlid%3D43c61bc7903215a8d428733c6ce91387&vqd=4-209513632109125452796151339366236631186&iurl=%7B1%7DIG%3DC0BA40FABFC646C6AC08B5C085CF2851%26CID%3D3ABA777EAC1B6E0F00BF61F1AD826FA3%26ID%3DDevEx%2C5057.1"
+},
+{
+"title":
+"Answers For Any Subject",
+"link":
+"https://duckduckgo.com/y.js?ad_domain=smartsolve.ai&ad_provider=bingv7aa&ad_type=txad&click_metadata=%2Dl1zepyNLKF4UEBrEFuNKjP5BxG3UU8Z6nFunuAbTH0AdpRu1nIfPDGTEaSkncnzHnIidaOI5FqVPC2WBRiMMv81kLDxYO0%2DuFaNfxUB9DbAkQSHUSRgJIThNme6Fk%2DB.TQXhaGO6faIO0KT228Qnyg&eddgt=KWcvKKe6_YUb5PKPXo2GJw%3D%3D&rut=d18c31bcd634ac7755ee0f19915853d8dbc35f05b912d518d2520885d6e84dd1&u3=https%3A%2F%2Fwww.bing.com%2Faclick%3Fld%3De8lNWz3fMoo8hokiMDecdZwDVUCUxrRkxDsyuHHk1oeNYVhMxsMnaYmLzKusaBw_hC1U00MVc8XfBa8wx0noZeWKLP_8lLpQBxIyeWGdg2CmYdINiGIkMVJ6JtCW3Lf9l66G_cAbwqChCSKMsVuPYnOG4_Wx9zAwksru8ZQstyN0JvmHxBkcQkJLG3YbpcBKbLfJBhBZMXEjJVKfyICDAaniAbYaQXYzzv3VRdYdE4Rik3PD4tXztWcQqwIqCRTny1B3XVYYDkhqWu7PUUn2rjxYMLcRcHye96hKCQGAaeqdcVKhbBKqzOQ5z8K6K5HvF8nN_1SdKwnBsdLUwa%2Dr2HfzDreDxkp_pt6Q6HIm4NlVSx4fJf0r73wIhBKG36H9sxrL2jWkF3PW_anPteVg5ayH4W4d313tFpmU09mMGTOIKcSJNl5OI0%2Dy0%2DHoypyVmEFac6Aj%2DClczW9fP4UbKeo5OSRCsxGskd1XY3XZTzC9hnTumNHyeL5ycvIhwoKhocxK1SudyuLYd_TncGQ0ICN_f6Q4chr6JDwkwmjdoQSZCuiwCfpgT2ZmIq2%2DjK2XZNn5WsJGFVFQ74q10rRbbh3n%2DJPIUvkKPxN4yI9P4QSaORutsqNdM6yzaP9n_HXbLt7vzAH_uv2jn60RdUcAP7f4OeRc6kRU8Xr9hNmzIh5BIyfoNCMRssLskVgnPM6LSvS6m3yBuD9UrBkhSUlN3UKp5JX0qtpAIUKDsXiGrjcIYeFYXDq2arhunp%2D2vlb2qVJmBSJul0HDSVQN043LdjdFYEDYw%26u%3DaHR0cHMlM2ElMmYlMmZzbWFydHNvbHZlLmFpJTNmc3NyZiUzZGJuZyUyNm1zY2xraWQlM2Q2YjJhZTNlZjlhZTkxNjRmZjg1NThiMTQ2NjMyZjFjZA%26rlid%3D6b2ae3ef9ae9164ff8558b146632f1cd&vqd=4-167317849491966912872442374017880349432&iurl=%7B1%7DIG%3DC0BA40FABFC646C6AC08B5C085CF2851%26CID%3D3ABA777EAC1B6E0F00BF61F1AD826FA3%26ID%3DDevEx%2C5059.1"
+}
+]
+}
+],
+"organic_results":
+[
+{
+"position":
+1,
+"title":
+"Organic chemistry | Science | Khan Academy",
+"link":
+"https://www.khanacademy.org/science/organic-chemistry",
+"snippet":
+"Sal and Jay cover topics covered in college organic chemistry course. Basic understanding of basic high school or college chemistry assumed (although there is some review).",
+"favicon":
+"https://external-content.duckduckgo.com/ip3/www.khanacademy.org.ico",
+"sitelinks":
+[
+{
+"title":
+"Chemistry Library",
+"link":
+"https://www.khanacademy.org/science/chemistry",
+"snippet":
+"Chemistry archive Chemistry archive The chemistry archive contains legacy chemistry content, and is not being updated with new content. For our most up-to-date, mastery-enabled courses, check out Middle School Chemistry, High School Chemistry and AP Chemistry!"
+},
+{
+"title":
+"Alkanes & Cycloalkanes",
+"link":
+"https://www.khanacademy.org/science/organic-chemistry/bond-line-structures-alkanes-cycloalkanes",
+"snippet":
+"The properties of organic molecules depend on the structure, and knowing the names of organic compounds allow us to communicate with other chemists. We'll be learning about different aspects of molecular structure, including common functional groups and conformations."
+},
+{
+"title":
+"Elimination Reactions",
+"link":
+"https://www.khanacademy.org/science/organic-chemistry/substitution-elimination-reactions",
+"snippet":
+"Learn about substitution and elimination reactions in organic chemistry with Khan Academy's comprehensive lessons and interactive exercises."
+},
+{
+"title":
+"Structure and Bonding",
+"link":
+"https://www.khanacademy.org/science/organic-chemistry/gen-chem-review",
+"snippet":
+"Let's review the basics of chemical bonds including dot structures, hybridization, bond-line structures, electronegativity, and polarity. We will also discuss how bonding and intermolecular forces relate to physical properties such as boiling point."
+},
+{
+"title":
+"Khan Academy",
+"link":
+"https://www.khanacademy.org/science/organic-chemistry/organic-structures",
+"snippet":
+"Let's review how to keep track of electrons using formal charges, oxidation states, oxidation-reduction reactions, and resonance structures. We will also go over the principles of acid-base chemistry."
+},
+{
+"title":
+"Unit 4 Stereochemistry",
+"link":
+"https://www.khanacademy.org/science/organic-chemistry/stereochemistry-topic",
+"snippet":
+"Explore stereochemistry concepts with Khan Academy's free resources, offering engaging lessons and practice for mastering this essential organic chemistry topic."
+}
+]
+},
+{
+"position":
+2,
+"title":
+"Master Organic Chemistry - An Online Organic Chemistry Resource",
+"link":
+"https://www.masterorganicchemistry.com/",
+"snippet":
+"400+ free articles on undergraduate organic chemistry topics plus free (and paid) study guides, a reaction encyclopedia, practice problems, tutoring & more.",
+"favicon":
+"https://external-content.duckduckgo.com/ip3/www.masterorganicchemistry.com.ico"
+},
+{
+"position":
+3,
+"title":
+"Organic Chemistry for Beginners: A Simple Guide",
+"link":
+"https://www.sciencenewstoday.org/organic-chemistry-for-beginners-a-simple-guide",
+"date_raw":
+"2025-04-25T00:00:00.0000000",
+"date":
+"Apr 25, 2025",
+"snippet":
+"Advances in organic synthesis are allowing chemists to create more efficient, sustainable, and environmentally friendly compounds. The development of green chemistry, which focuses on reducing the environmental impact of chemical processes, is a growing area of research.",
+"favicon":
+"https://external-content.duckduckgo.com/ip3/www.sciencenewstoday.org.ico"
+},
+{
+"position":
+4,
+"title":
+"Mastering the Basics of Organic Chemistry: A Simplified Guide (Free PDF ...",
+"link":
+"https://superchemistryclasses.com/mastering-the-basics-of-organic-chemistry/",
+"date_raw":
+"2025-03-27T00:00:00.0000000",
+"date":
+"Mar 27, 2025",
+"snippet":
+"Organic chemistry is often called the "chemistry of life" because it focuses on carbon-based compounds found in living organisms. While it may seem challenging at first, breaking it down into fundamental concepts makes it much easier to understand. This guide provides clear, simplified notes on organic chemistry basics, perfect for students, educators, or anyone looking to strengthen their ...",
+"favicon":
+"https://external-content.duckduckgo.com/ip3/superchemistryclasses.com.ico"
+},
+{
+"position":
+5,
+"title":
+"1.1: Introduction to organic chemistry - Chemistry LibreTexts",
+"link":
+"https://chem.libretexts.org/Courses/SUNY_Potsdam/Book%3A_Organic_Chemistry_I_(Walker)/01%3A_Introduction/1.01%3A_Introduction_to_organic_chemistry",
+"snippet":
+"Organic chemistry is the study of the chemistry of carbon compounds. Organic molecules can be classified according to the types of elements and bonds in the molecules.",
+"favicon":
+"https://external-content.duckduckgo.com/ip3/chem.libretexts.org.ico"
+},
+{
+"position":
+6,
+"title":
+"Organic Chemistry I - Open Textbook Library",
+"link":
+"https://open.umn.edu/opentextbooks/textbooks/1119",
+"snippet":
+"An open textbook that is suitable for the first semester of Organic Chemistry. Basic concepts of the structures and reactivities of organic molecules are covered in this open textbook. Besides the fundamental discussions of organic acids-bases, stereochemistry, IR and NMR, this book also includes the topics of substitution and elimination reactions, radical substitution of alkanes, preparation ...",
+"favicon":
+"https://external-content.duckduckgo.com/ip3/open.umn.edu.ico"
+},
+{
+"position":
+7,
+"title":
+"Organic Chemistry 1: An open textbook | Simple Book Production",
+"link":
+"https://courses.lumenlearning.com/suny-potsdam-organicchemistry/",
+"snippet":
+"Organic Chemistry 1: An open textbook Table of Contents 1. INTRODUCTION 1.1. Introduction to organic chemistry 1.2. History 1.3. Basics of bonding 1.4. Representing structures 1.5. Isomerism 1.6. Functional Groups 1.7. 3D Structure 1.8. Intermolecular forces 2. BONDING & MOLECULAR STRUCTURE 2.1. Combining atomic orbitals, sigma and pi bonding 2 ...",
+"favicon":
+"https://external-content.duckduckgo.com/ip3/courses.lumenlearning.com.ico"
+},
+{
+"position":
+8,
+"title":
+"Good Resources to Learn Organic Chemistry for Beginners and Advanced ...",
+"link":
+"https://chemcafe.net/chemistry/good-resources-to-learn-organic-chemistry-13479/",
+"date_raw":
+"2025-08-09T00:00:00.0000000",
+"date":
+"Aug 9, 2025",
+"snippet":
+"While classic chemistry sets can be basic, exploring safe and relevant organic chemistry projects can deepen understanding by direct observation of reactions. Currently, specific online resources offering guided organic experiments beyond textbook exercises are limited, but seeking academic lab manuals or university virtual labs can be beneficial.",
+"favicon":
+"https://external-content.duckduckgo.com/ip3/chemcafe.net.ico"
+},
+{
+"position":
+9,
+"title":
+"General Chemistry Introduction To Organic Chemistry. Free In-Depth ...",
+"link":
+"https://chemistry.coach/general-chemistry-3/introduction-to-organic-chemistry",
+"snippet":
+"2025 Updated Study Guide on The Unique Nature of Carbon, Bonding in Organic Chemistry, Functional Groups, and more. Delve into Representing Organic Molecules, Resonance Forms in an easy-to-understand format. Start Mastering these General Chemistry concepts today - Access is completely free!",
+"favicon":
+"https://external-content.duckduckgo.com/ip3/chemistry.coach.ico"
+},
+{
+"position":
+10,
+"title":
+"Organic Chemistry (OpenStax) - Chemistry LibreTexts",
+"link":
+"https://chem.libretexts.org/Bookshelves/Organic_Chemistry/Organic_Chemistry_(OpenStax)",
+"snippet":
+"This text continues to meet the scope and sequence of a two-semester organic chemistry course that follows a functional group approach. A highlighted list of changes, along with a detailed table of contents and ancillary descriptions, can be found on the Instructor and Student resources sections of this page.",
+"favicon":
+"https://external-content.duckduckgo.com/ip3/chem.libretexts.org.ico"
+},
+{
+"position":
+11,
+"title":
+"Organic Chemistry: Key Concepts and Real-World Applications",
+"link":
+"https://sciquants.com/articles/organic-chemistry-fundamentals-resources-applications/",
+"snippet":
+"Fundamental Concepts Understanding the foundational aspects of organic chemistry is crucial for anyone stepping into this intricate field. This section will dissect the basic structure of organic compounds, the pivotal role of functional groups, and the complexities of stereochemistry and isomerism.",
+"favicon":
+"https://external-content.duckduckgo.com/ip3/sciquants.com.ico"
+},
+{
+"position":
+12,
+"title":
+"The Essential Guide to Basic Organic Chemistry Principles",
+"link":
+"https://superchemistryclasses.com/basic-organic-chemistry/",
+"date_raw":
+"2025-03-27T00:00:00.0000000",
+"date":
+"Mar 27, 2025",
+"snippet":
+"Master the basic organic chemistry principles with this beginner's guide! Learn about functional groups, key organic reactions, and real-world applications. Perfect for students & curious minds. Start your chemistry journey today!,Organic Chemistry,",
+"favicon":
+"https://external-content.duckduckgo.com/ip3/superchemistryclasses.com.ico"
+},
+{
+"position":
+13,
+"title":
+"PDF Fundamentals Of Organic Chemistry - media.tychr.com",
+"link":
+"https://media.tychr.com/wp-content/uploads/2023/free-resources/Chemistry/Organic-Chemistry.pdf",
+"snippet":
+"Introduction To Organic Chemistry • Organic chemistry is the field of chemistry that studies carbon-based compounds. Carbon atoms have four valence electrons so they can form four bonds to other atoms. Carbon can undergo catenation, the process by which many identical atoms are joined together by covalent bonds, producing straight-chain, branched, or cyclic structures. Organic chemistry is ...",
+"favicon":
+"https://external-content.duckduckgo.com/ip3/media.tychr.com.ico"
+},
+{
+"position":
+14,
+"title":
+"PDF Chapter 1 Introduction to Organic Chemistry",
+"link":
+"https://www.siue.edu/~tpatric/Ch%2001%20Intro%20H%20T%20I.pdf",
+"snippet":
+"In theory (Oparin, 1923) organic chemistry big bang when the components of ammonia, combined to form amino acids, an experiment (Miller, 1950).were used Organic inancient times chemicals by Romans and Egyptians as dyes, medicines and poisons composition of the substances was unknown. In the 16th century organic compounds state (Scheele, 1769) and analytical methods elemental composition ...",
+"favicon":
+"https://external-content.duckduckgo.com/ip3/www.siue.edu.ico"
+},
+{
+"position":
+15,
+"title":
+"Fundamental Organic Chemistry I - Chemistry LibreTexts",
+"link":
+"https://chem.libretexts.org/Courses/University_of_Illinois_UrbanaChampaign/Chem_2363A_Fundamental_Organic_Chemistry_I_(Chan)",
+"snippet":
+"Welcome to Fundamental Organic Chemistry I! Here you will find bonus content and exercises to cement your knowledge.",
+"favicon":
+"https://external-content.duckduckgo.com/ip3/chem.libretexts.org.ico"
+},
+{
+"position":
+16,
+"title":
+"1.1. Introduction to organic chemistry | Organic Chemistry 1: An open ...",
+"link":
+"https://courses.lumenlearning.com/suny-potsdam-organicchemistry/chapter/1-1-introduction-to-organic-chemistry/",
+"snippet":
+"Organic chemistry is the study of the chemistry of carbon compounds. A functional group is a specific structural arrangement of atoms or bonds that imparts a characteristic chemical reactivity to the molecule; alcohol group and carboxylic group (answers will vary).",
+"favicon":
+"https://external-content.duckduckgo.com/ip3/courses.lumenlearning.com.ico"
+},
+{
+"position":
+17,
+"title":
+"1: Organic Chemistry Basics - Chemistry LibreTexts",
+"link":
+"https://chem.libretexts.org/Courses/Case_Western_Reserve_University/CHEM_121%3A_Concepts_for_a_Molecular_View_of_Biology_II_(Cunningham)/1%3A_Organic_Chemistry_Basics",
+"snippet":
+"1.1: Organic Chemistry Today organic chemistry is the study of the chemistry of the carbon compounds, and inorganic chemistry is the study of the chemistry of all other elements.",
+"favicon":
+"https://external-content.duckduckgo.com/ip3/chem.libretexts.org.ico"
+},
+{
+"position":
+18,
+"title":
+"Organic Chemistry - A Tenth Edition - Open Textbook Library",
+"link":
+"https://open.umn.edu/opentextbooks/textbooks/1498",
+"date_raw":
+"2024-07-23T00:00:00.0000000",
+"date":
+"Jul 23, 2024",
+"snippet":
+"Organic Chemistry: A Tenth Edition continues to meet the scope and sequence of a two-semester organic chemistry course that follows a functional group approach. A highlighted list of changes along with a detailed table of contents and ancillary descriptions can be found on the Instructor and Student resources sections of this page.",
+"favicon":
+"https://external-content.duckduckgo.com/ip3/open.umn.edu.ico"
+},
+{
+"position":
+19,
+"title":
+"MASTER Organic Chemistry: Essential Overview",
+"link":
+"https://warreninstitute.org/organic-chemistry-basic-introduction/",
+"snippet":
+"The Fundamentals of Organic Chemistry Organic chemistry is the branch of chemistry that deals with the study of carbon-based compounds and their properties, structure, composition, reactions, and synthesis. In this section, we will explore the key concepts and foundational principles of organic chemistry, including the importance of carbon, the structure of organic molecules, and the different ...",
+"favicon":
+"https://external-content.duckduckgo.com/ip3/warreninstitute.org.ico"
+},
+{
+"position":
+20,
+"title":
+"Organic Chemistry - Chemistry LibreTexts",
+"link":
+"https://chem.libretexts.org/Bookshelves/Organic_Chemistry",
+"snippet":
+"Organic chemistry is the chemistry of carbon and carbon-containing compounds. Since the core structural, catalytic, information storage, and retrieval systems of organisms are carbon-based macromolecules, organic chemistry is of direct relevance to the life sciences.",
+"favicon":
+"https://external-content.duckduckgo.com/ip3/chem.libretexts.org.ico"
+}
+],
+"inline_videos":
+[
+{
+"position":
+1,
+"title":
+"Organic Chemistry - Basic Introduction",
+"link":
+"https://www.youtube.com/watch?v=B_ketdzJtY8",
+"duration":
+"41:56",
+"platform":
+"YouTube",
+"date":
+"2021-03-29T00:01:47.0000000",
+"views":
+3703721,
+"thumbnail":
+"https://tse4.mm.bing.net/th/id/OVP.7FO3ptYPzkShgctYxYVcJAHgFo?pid=Api"
+},
+{
+"position":
+2,
+"title":
+"SOME BASIC CONCEPTS OF ORGANIC CHEMISTRY ONE SHOT 🔥 COMPLETE CHAPTER FOR EXAM 2025 BY MUNIL SIR",
+"link":
+"https://www.youtube.com/watch?v=eC6RfChTDLA",
+"duration":
+"3:25:46",
+"platform":
+"YouTube",
+"date":
+"2025-01-05T13:44:37.0000000",
+"views":
+212262,
+"thumbnail":
+"https://tse2.mm.bing.net/th/id/OVP.cTv7mcI7LTh5exzRFkF27gEsDh?pid=Api"
+},
+{
+"position":
+3,
+"title":
+"Organic Chemistry: Some Basic Principles and Techniques | Class 11Chemistry | Full Chapter in 15 Min",
+"link":
+"https://www.youtube.com/watch?v=tnsvWiSTPJ8",
+"duration":
+"16:10",
+"platform":
+"YouTube",
+"date":
+"2025-01-25T11:01:13.0000000",
+"views":
+203502,
+"thumbnail":
+"https://tse4.mm.bing.net/th/id/OVP.g8ecAQ2ZVTs-j4BLLmuKZgEsDh?pid=Api"
+},
+{
+"position":
+4,
+"title":
+"SOME BASIC PRINCIPLES AND TECHNIQUES in 1 Shot (Concepts+PYQs) || Class 11th ORGANIC CHEMISTRY",
+"link":
+"https://www.youtube.com/watch?v=xAI7Tj6N9Fw",
+"duration":
+"3:57:56",
+"platform":
+"YouTube",
+"date":
+"2024-02-08T12:30:42.0000000",
+"views":
+1317401,
+"thumbnail":
+"https://tse4.mm.bing.net/th/id/OVP.XL6pqDwGGCWB9MqUHt3UjwHgFo?pid=Api"
+},
+{
+"position":
+5,
+"title":
+"Organic Chemistry Class 11 One Shot: Some Basic Principles and Techniques | CBSE 11th Chemistry",
+"link":
+"https://www.youtube.com/watch?v=soIba7r34ZM",
+"duration":
+"2:56:06",
+"platform":
+"YouTube",
+"date":
+"2025-01-19T15:30:31.0000000",
+"views":
+1192173,
+"thumbnail":
+"https://tse3.mm.bing.net/th/id/OVP.jBMQ4_xKXyaPVMVVVFzcDgEsDh?pid=Api"
+},
+{
+"position":
+6,
+"title":
+"Organic Chemistry Basics - For Beginners",
+"link":
+"https://www.youtube.com/watch?v=462O7WOG78c",
+"duration":
+"28:39",
+"platform":
+"YouTube",
+"date":
+"2025-06-28T19:00:06.0000000",
+"views":
+477,
+"thumbnail":
+"https://tse2.mm.bing.net/th/id/OVP.9eGOzNTNh-CEzwPYPgQ0ugEsDh?pid=Api"
+},
+{
+"position":
+7,
+"title":
+"Introduction to Organic Chemistry || Basics, Definitions, Explanations, Terms, Examples",
+"link":
+"https://www.youtube.com/watch?v=c-LvuzOjH_k",
+"duration":
+"7:31",
+"platform":
+"YouTube",
+"date":
+"2025-07-14T16:17:30.0000000",
+"views":
+97,
+"thumbnail":
+"https://tse4.mm.bing.net/th/id/OVP.QN61kSgvSjxYA8JILdVrpAHgFo?pid=Api"
+},
+{
+"position":
+8,
+"title":
+"lec#1 Organic Chemistry - Basic Introduction || Introduction to Organic Chemistry || 11 Chemistry",
+"link":
+"https://www.youtube.com/watch?v=bvR03sj5eQQ",
+"duration":
+"19:16",
+"platform":
+"YouTube",
+"date":
+"2024-10-06T06:46:26.0000000",
+"views":
+11745,
+"thumbnail":
+"https://tse2.mm.bing.net/th/id/OVP.LM7HqObrScnVsyag5r2C2wEsDh?pid=Api"
+},
+{
+"position":
+9,
+"title":
+"Organic Chemistry Concepts in 30 Minutes | Rapid Revision of GOC | General Organic Chemistry",
+"link":
+"https://www.youtube.com/watch?v=GOM70Jm_0AM",
+"duration":
+"38:58",
+"platform":
+"YouTube",
+"date":
+"2024-10-10T10:53:22.0000000",
+"views":
+119722,
+"thumbnail":
+"https://tse2.mm.bing.net/th/id/OVP.3x9YtFchaF5Mvn83OCoKiAEsDh?pid=Api"
+},
+{
+"position":
+10,
+"title":
+"ORGANIC CHEMISTRY-SOME BASIC PRINCIPLES & TECHNIQUES in 1 Shot | Chemistry | 1st PUC",
+"link":
+"https://www.youtube.com/watch?v=Kzls03VeoPU",
+"duration":
+"7:56:13",
+"platform":
+"YouTube",
+"date":
+"2024-07-22T10:30:12.0000000",
+"views":
+130699,
+"thumbnail":
+"https://tse3.mm.bing.net/th/id/OVP.sz3hEmyUV9QfUFdaKTW4EAEsDh?pid=Api"
+}
+],
+"inline_videos_link":
+"https://duckduckgo.com/?q=best+resource+to+find+Basic+concepts+and+scope+of+organic+chemistry&kl=us-en&iax=videos&ia=videos",
+"related_searches":
+[
+{
+"query":
+"organic chemistry topics",
+"link":
+"https://duckduckgo.com/?q=organic%20chemistry%20topics"
+},
+{
+"query":
+"organic chemistry basics pdf",
+"link":
+"https://duckduckgo.com/?q=organic%20chemistry%20basics%20pdf"
+},
+{
+"query":
+"core of organic chemistry",
+"link":
+"https://duckduckgo.com/?q=core%20of%20organic%20chemistry"
+},
+{
+"query":
+"organic chemistry pdf",
+"link":
+"https://duckduckgo.com/?q=organic%20chemistry%20pdf"
+},
+{
+"query":
+"what is organic chemistry",
+"link":
+"https://duckduckgo.com/?q=what%20is%20organic%20chemistry"
+},
+{
+"query":
+"organic chemistry for beginners",
+"link":
+"https://duckduckgo.com/?q=organic%20chemistry%20for%20beginners"
+},
+{
+"query":
+"organic chemistry moc questions",
+"link":
+"https://duckduckgo.com/?q=organic%20chemistry%20moc%20questions"
+},
+{
+"query":
+"organic chemistry for dummies",
+"link":
+"https://duckduckgo.com/?q=organic%20chemistry%20for%20dummies"
+}
+],
+"serpapi_pagination":
+{
+"next":
+"https://serpapi.com/search.json?engine=duckduckgo&kl=us-en&q=best+resource+to+find+Basic+concepts+and+scope+of+organic+chemistry&start=20"
+}
+}
+
+// const generatePrompt = (topic: string, durationUnit: string, durationValue: number) => {
+//   const breakdownMap = {
+//     days: "hours",
+//     weeks: "days",
+//     months: "weeks",
+//   };
+//   const breakdown = breakdownMap[durationUnit as keyof typeof breakdownMap];
+
+//   return `
+// You are an expert study planner and subject matter specialist with deep knowledge of effective learning pace.
+// Create a structured, step-by-step study plan that helps a student master the topic "${topic}" within ${durationValue} ${durationUnit}.
+
+// Requirements:
+// 1. Break the total study duration into smaller ${breakdown} intervals, progressing logically from fundamentals to advanced understanding.
+
+// 2. TIME RANGE CALCULATION - VERY IMPORTANT:
+//    - Each subtopic requires approximately 25-40 minutes of focused study
+//    - Calculate session duration based on number of subtopics: 
+//      * 3 subtopics = 1.5-2 hours
+//      * 4 subtopics = 2-3 hours  
+//      * 5 subtopics = 2.5-3.5 hours
+//      * 6 subtopics = 3-4 hours
+//    - Format: "Day X: HH:MMam/pm - HH:MMam/pm" (e.g., "Day 1: 10:00am - 1:00pm")
+//    - Typical study sessions: morning (9am-12pm or 10am-1pm), afternoon (2pm-5pm or 2pm-6pm)
+//    - Allow at least 1 hour break between sessions
+
+// 3. For each interval, include:
+//    - "range": Calculated realistic study period based on subtopic count
+//    - "topic": Specific focused aspect of ${topic} (NOT just "${topic}")
+//    - "subtopics": An array of 3-6 concrete, actionable subtopics
+//        • "t": the name of the subtopic (string)
+//        • "completed": boolean, always false
+
+// 4. TOPIC NAMING:
+//    - Each topic should be a SPECIFIC area, not generic
+//    - Example: Instead of "calculus", use "Limits and Continuity", "Derivative Techniques", "Integration Methods"
+
+// IMPORTANT:
+// - Return **pure JSON only** — no markdown, no explanations, no comments
+// - Do not wrap JSON in code fences
+// - Calculate time ranges realistically based on subtopic complexity and count
+// - Distribute sessions logically across ${durationValue} ${durationUnit}
+// - Ensure topics are specific and diverse
+
+// EXAMPLE (showing proper time calculation):
+
+// [
+//   {
+//     "range": "Day 1: 10:00am - 1:00pm",
+//     "topic": "Foundations of Limits and Continuity",
+//     "subtopics": [
+//       { "t": "Understanding limits through graphs and tables", "completed": false },
+//       { "t": "One-sided limits and limit laws", "completed": false },
+//       { "t": "Continuity and types of discontinuities", "completed": false },
+//       { "t": "Limits at infinity", "completed": false }
+//     ]
+//   },
+//   {
+//     "range": "Day 1: 2:00pm - 4:30pm",
+//     "topic": "Introduction to Derivatives",
+//     "subtopics": [
+//       { "t": "Definition of derivative using limits", "completed": false },
+//       { "t": "Geometric interpretation of derivatives", "completed": false },
+//       { "t": "Basic differentiation rules", "completed": false }
+//     ]
+//   },
+//   {
+//     "range": "Day 2: 10:00am - 1:30pm",
+//     "topic": "Advanced Differentiation Techniques",
+//     "subtopics": [
+//       { "t": "Product rule and quotient rule", "completed": false },
+//       { "t": "Chain rule and its applications", "completed": false },
+//       { "t": "Implicit differentiation", "completed": false },
+//       { "t": "Higher order derivatives", "completed": false },
+//       { "t": "Practice complex differentiation problems", "completed": false }
+//     ]
+//   }
+// ]
+
+// Note: First session has 4 subtopics = 3 hours. Second has 3 subtopics = 2.5 hours. Third has 5 subtopics = 3.5 hours.
+
+// Now generate the complete study plan for "${topic}" over ${durationValue} ${durationUnit}:
+//   `;
+// };
