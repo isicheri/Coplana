@@ -11,12 +11,42 @@ datasource db {
 }
 
 model User {
-  id        String     @id @default(uuid())
-  email     String     @unique
-  username  String
-  schedules Schedule[]
-  quizAttempts QuizAttempt[]  // Add this
-  createdAt DateTime   @default(now())
+  id                    String        @id @default(uuid())
+  email                 String        @unique
+  username              String
+  emailVerified         Boolean       @default(false)
+  isActive              Boolean       @default(true)
+  schedules             Schedule[]
+  quizAttempts          QuizAttempt[]
+  verificationTokens    VerificationToken[]
+  loginVerificationCodes LoginVerificationCode[]
+  createdAt             DateTime      @default(now())
+  updatedAt             DateTime?      @updatedAt
+}
+
+// For email verification during signup
+model VerificationToken {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  token     String   @unique
+  type      String   // "email_verification"
+  expiresAt DateTime
+  used      Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
+
+// For login verification codes (sent every login)
+model LoginVerificationCode {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  code      String   // 6-digit code
+  expiresAt DateTime
+  verified  Boolean  @default(false)
+  createdAt DateTime @default(now())
+  
+  @@index([userId, code])
 }
 
 model Schedule {
@@ -26,6 +56,7 @@ model Schedule {
   user             User       @relation(fields: [userId], references: [id], onDelete: Cascade)
   remindersEnabled Boolean    @default(false) 
   startDate        DateTime?
+  lastReminderSent DateTime?
   planItems        PlanItem[]    
   createdAt        DateTime   @default(now())
   updatedAt        DateTime   @updatedAt
@@ -47,62 +78,61 @@ model Subtopic {
   id         String   @id @default(uuid())
   planItemId String
   planItem   PlanItem @relation(fields: [planItemId], references: [id], onDelete: Cascade)
-  title      String   // t in your JSON
+  title      String
   completed  Boolean  @default(false)
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
 }
 
 model Quiz {
-  id         String     @id @default(uuid())
-  planItemId String     @unique
-  planItem   PlanItem   @relation(fields: [planItemId], references: [id], onDelete: Cascade)
+  id         String        @id @default(uuid())
+  planItemId String        @unique
+  planItem   PlanItem      @relation(fields: [planItemId], references: [id], onDelete: Cascade)
   title      String
   questions  Question[]
-  attempts   QuizAttempt[]  // Add this
-  createdAt  DateTime   @default(now())
-  updatedAt  DateTime   @updatedAt
+  attempts   QuizAttempt[]
+  createdAt  DateTime      @default(now())
+  updatedAt  DateTime      @updatedAt
 }
 
 model Question {
-  id         String   @id @default(uuid())
-  quizId     String   
-  quiz       Quiz     @relation(fields: [quizId], references: [id], onDelete: Cascade)
-  question   String
-  options    Option[]
-  correctAnswer String  // Store which option is correct (e.g., "A", "B", "C", "D" or the option id)
-  // explanation String? v2 features
-   userAnswers   UserAnswer[] // Add this
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  id            String       @id @default(uuid())
+  quizId        String   
+  quiz          Quiz         @relation(fields: [quizId], references: [id], onDelete: Cascade)
+  question      String
+  options       Option[]
+  correctAnswer String       // Store which option is correct (e.g., "A", "B", "C", "D" or the option id)
+  userAnswers   UserAnswer[]
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
 }
 
 model Option {
-  id         String   @id @default(uuid())
-  questionId String
-  question   Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
-  label      String   // e.g., "A", "B", "C", "D"
-  content    String   // The actual option text
+  id          String       @id @default(uuid())
+  questionId  String
+  question    Question     @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  label       String       // e.g., "A", "B", "C", "D"
+  content     String       // The actual option text
   userAnswers UserAnswer[] 
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
 }
 
 model QuizAttempt {
-  id            String       @id @default(uuid())
-  quizId        String
-  quiz          Quiz         @relation(fields: [quizId], references: [id], onDelete: Cascade)
-  userId        String
-  user          User         @relation(fields: [userId], references: [id], onDelete: Cascade)
-  score         Int          // Number of correct answers
-  totalQuestions Int         // Total questions in quiz
-  percentage    Float        // score / totalQuestions * 100
-  answers       UserAnswer[]
-  startedAt     DateTime     @default(now())
-  completedAt   DateTime?    // null until quiz is submitted
-  timeTaken     Int?         // seconds taken to complete
-  createdAt     DateTime     @default(now())
-  updatedAt     DateTime     @updatedAt
+  id             String       @id @default(uuid())
+  quizId         String
+  quiz           Quiz         @relation(fields: [quizId], references: [id], onDelete: Cascade)
+  userId         String
+  user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  score          Int          // Number of correct answers
+  totalQuestions Int          // Total questions in quiz
+  percentage     Float        // score / totalQuestions * 100
+  answers        UserAnswer[]
+  startedAt      DateTime     @default(now())
+  completedAt    DateTime?    // null until quiz is submitted
+  timeTaken      Int?         // seconds taken to complete
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
 }
 
 model UserAnswer {

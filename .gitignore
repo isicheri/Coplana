@@ -105,3 +105,12 @@ bun.lockb
 /mcp-server/**/*.js
 /src/generated/prisma
 prisma/dev.db
+
+### **.gitignore**:
+```
+node_modules/
+dist/
+.env
+*.db
+*.db-journal
+prisma/migrations/
