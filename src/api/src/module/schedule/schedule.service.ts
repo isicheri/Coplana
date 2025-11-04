@@ -1,8 +1,10 @@
-import {  PrismaClient } from "@prisma/client";
+import { PrismaClient } from "@prisma/client";
 import {prisma} from "../../lib/prisma.js"
 import { CreateScheduleDto, GenerateScheduleDto } from "./schema/schedule.schema.js";
-import { studyPlannerAgent } from "@/mastra/agents";
 import HttpError from "../../config/handler/HttpError/HttpError.js";
+// import {studyPlannerAgent} from "@agent/agents";
+import { studyPlannerAgent } from "../../mastra/agents/index.js";
+
 
 export class ScheduleService {
 
@@ -19,6 +21,7 @@ async generateSchedule({topic,durationUnit,durationValue}:GenerateScheduleDto) {
 
     try {
    // 🧠 Use the agent to call the tool with the inputs
+// let studyPlannerAgent = mastra.getAgentById("studyPlannerAgent")
     const result = await studyPlannerAgent.generateVNext([
       {
         role: "user",

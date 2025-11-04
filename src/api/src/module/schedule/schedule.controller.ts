@@ -1,66 +1,49 @@
 import express from "express";
 import { ScheduleService } from "./schedule.service.js";
-import { formatZodValidationError, generateScheduleSchema } from "./schema/schedule.schema.js";
+import { createScheduleSchema, formatZodValidationError, generateScheduleSchema, updateReminderSchema } from "./schema/schedule.schema.js";
 
 interface IScheduleController {
-
     generate: (req: express.Request,res: express.Response,next: express.NextFunction) => Promise<any>;
-    create: (req:express.Request,res:express.Request) => Promise<void>;
-    getUserSchedule: (req:express.Request,res: express.Response) => Promise<void>
-
+    save: (req:express.Request,res:express.Response,next:express.NextFunction) => Promise<any>;
+    list: (req:express.Request,res: express.Response,next:express.NextFunction) => Promise<any>,
+    delete: (req: express.Request,res:express.Response,next:express.NextFunction) => Promise<any>
+    updateReminders: (req: express.Request,res: express.Response,next: express.NextFunction) => Promise<any>
 }
 
 export const ScheduleController = (scheduleService: ScheduleService): IScheduleController =>  {
-    
+  
     return {
 
 
-    /**
-     * @swagger
-     * /api/v1/schedules:
-     * post: 
-     *  tags: [Schedules]
-     *  summary: Generate a study schedule 
-     *  description: Generate AI-powered study plan for a topic
-     * security: 
-     *  - bearerAuth: []
-      *     requestBody:
-     *       required: true
-     *       content:
-     *         application/json:
-     *           schema:
-     *             type: object
-     *             required:
-     *               - topic
-     *               - durationUnit
-     *               - durationValue
-     *          properties:
-     *               topic:
-     *                 type: string
-     *                 example: Advanced Calculus
-     *              durationUnit:
-     *                 type: string
-     *                 example: Days | Weeks | Months
-     *              durationValue: 
-     *                  type: integer
-     *                  example: 4 
-     *   responses:
+/**
+ * @swagger
+ * /api/v1/schedules/generate:
+ *   post:
+ *     summary: Generate a study plan
+ *     tags: [Schedules]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - topic
+ *               - durationUnit
+ *               - durationValue
+ *             properties:
+ *               topic:
+ *                 type: string
+ *               durationUnit:
+ *                 type: string
+ *                 enum: [days, weeks, months]
+ *               durationValue:
+ *                 type: number
+ *     responses:
  *       200:
- *         description: Schedule schedule generated  successfully
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *       400:
- *         $ref: '#/components/responses/UnauthorizedError'
- *       400:
- *         $ref: '#/components/responses/ValidationError'
-     * 
-     *  */
-      generate: async (req,res,next) =>  {
+ *         description: Study plan generated
+ */
+      generate: async (req,res,next) => {
          try {
       const parsed = generateScheduleSchema.safeParse(req.body);
 
@@ -94,118 +77,132 @@ export const ScheduleController = (scheduleService: ScheduleService): IScheduleC
       next(error);
     }
       },
-        
-      /**
+
+/**
  * @swagger
- * /api/v1/schedules:
+ * /api/v1/schedules/save:
  *   post:
+ *     summary: Create a schedule
  *     tags: [Schedules]
- *     summary: Create a new study schedule
- *     description: Generate AI-powered study plan for a topic
  *     security:
  *       - bearerAuth: []
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             required:
- *               - title
- *               - topic
- *               - timeframe
- *             properties:
- *               title:
- *                 type: string
- *                 example: JavaScript Mastery
- *               topic:
- *                 type: string
- *                 example: Advanced JavaScript Concepts
- *               timeframe:
- *                 type: object
- *                 required:
- *                   - value
- *                   - unit
- *                 properties:
- *                   value:
- *                     type: integer
- *                     example: 4
- *                   unit:
- *                     type: string
- *                     enum: [days, weeks, months]
- *                     example: weeks
- *               remindersEnabled:
- *                 type: boolean
- *                 default: false
- *     responses:
- *       201:
- *         description: Schedule created successfully
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 scheduleId:
- *                   type: string
- *                 message:
- *                   type: string
- *       401:
- *         $ref: '#/components/responses/UnauthorizedError'
- *       400:
- *         $ref: '#/components/responses/ValidationError'
  */
-        async create(req, res) {},
+      save: async (req, res,next) => {
+             try {
+      const parsed = createScheduleSchema.safeParse(req.body);
+
+      if (!parsed.success) {
+        return res.status(400).json({
+          error: 'Validation failed',
+          details: formatZodValidationError(parsed),
+        });
+      }
+
+      const schedule = await scheduleService.createSchedule(parsed.data);
+
+      return res.status(201).json({ schedule });
+    } catch (error) {
+      next(error);
+    }
+
+        },
+
 
         /**
  * @swagger
- * /api/v1/schedules:
+ * /api/v1/schedules/personal:
  *   get:
+ *     summary: Get user schedules
  *     tags: [Schedules]
- *     summary: Get user's study schedules
- *     description: Retrieve all schedules for authenticated user
  *     security:
  *       - bearerAuth: []
- *     parameters:
- *       - in: query
- *         name: page
- *         schema:
- *           type: integer
- *           default: 1
- *         description: Page number
- *       - in: query
- *         name: limit
- *         schema:
- *           type: integer
- *           default: 10
- *         description: Items per page
- *     responses:
- *       200:
- *         description: Schedules retrieved successfully
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 schedules:
- *                   type: array
- *                   items:
- *                     type: object
- *                     properties:
- *                       id:
- *                         type: string
- *                       title:
- *                         type: string
- *                       createdAt:
- *                         type: string
- *                         format: date-time
- *                 total:
- *                   type: integer
- *                 page:
- *                   type: integer
- *       401:
- *         $ref: '#/components/responses/UnauthorizedError'
  */
-        async getUserSchedule(req, res) {},
-
+      list: async(req,res,next) => {
+          try {
+      const userId = req.user?.userId; // From auth middleware
+      if (!userId) {
+        return res.status(401).json({ error: 'Unauthorized' });
+      }
+      const schedules = await scheduleService.getUserSchedules(userId);
+      return res.json({ schedules });
+    } catch (error) {
+      next(error);
     }
+        },
+
+
+        /**
+ * @swagger
+ * /api/v1/schedules/{scheduleId}:
+ *   delete:
+ *     summary: Delete a schedule
+ *     tags: [Schedules]
+ *     security:
+ *       - bearerAuth: []
+ */
+       delete: async (req, res, next) =>  {
+    try {
+      const { scheduleId } = req.params;
+      const userId = req.user?.userId;
+
+      if (!userId) {
+        return res.status(401).json({ error: 'Unauthorized' });
+      }
+
+      await scheduleService.deleteSchedule(userId, scheduleId);
+
+      return res.json({ message: 'Schedule deleted successfully' });
+    } catch (error) {
+      next(error);
+    }
+        },
+
+
+        /**
+ * @swagger
+ * /api/v1/schedules/{scheduleId}/reminders:
+ *   patch:
+ *     summary: Toggle reminders
+ *     tags: [Schedules]
+ *     security:
+ *       - bearerAuth: []
+ */
+        updateReminders: async(req, res, next) =>  {
+    try {
+      const { scheduleId } = req.params;
+      const userId = req.user?.userId;
+
+      if (!userId) {
+        return res.status(401).json({ error: 'Unauthorized' });
+      }
+
+      const parsed = updateReminderSchema.safeParse({
+        ...req.body,
+        scheduleId,
+        userId,
+      });
+
+      if (!parsed.success) {
+        return res.status(400).json({
+          error: 'Validation failed',
+          details: parsed.error.errors,
+        });
+      }
+
+      const { toggleInput, startDate } = parsed.data;
+
+      const updated = await scheduleService.toggleReminders(
+        scheduleId,
+        userId,
+        toggleInput,
+        startDate
+      );
+
+      return res.json({ schedule: updated });
+    } catch (error) {
+      next(error);
+    }
+      }
+
+  }
 }

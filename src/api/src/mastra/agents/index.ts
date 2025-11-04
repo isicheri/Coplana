@@ -4,7 +4,7 @@ import { Agent } from "@mastra/core/agent";
 import { LibSQLStore } from "@mastra/libsql";
 import { z } from "zod";
 import { Memory } from "@mastra/memory";
-import { mcpClient } from "../mcp/client";
+import { mcpClient } from "../mcp/client.js";
 
 export const AgentState = z.object({
   user: z.object({
@@ -40,6 +40,7 @@ export const AgentState = z.object({
 });
 
 export const studyPlannerAgent = new Agent({
+  id: "studyPlannerAgent",
   name: "Study Planner Agent",
   tools: await mcpClient.getTools(),
   model: mistral("mistral-small-latest"),
