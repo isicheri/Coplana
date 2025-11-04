@@ -1,6 +1,8 @@
 import express from "express";
 import { ScheduleService } from "./schedule.service.js";
 import { createScheduleSchema, formatZodValidationError, generateScheduleSchema, updateReminderSchema } from "./schema/schedule.schema.js";
+import { v4 as uuidv4 } from 'uuid';
+import { scheduleGenerationQueue } from "../../lib/queue.js";
 
 interface IScheduleController {
     generate: (req: express.Request,res: express.Response,next: express.NextFunction) => Promise<any>;
@@ -43,8 +45,8 @@ export const ScheduleController = (scheduleService: ScheduleService): IScheduleC
  *       200:
  *         description: Study plan generated
  */
-      generate: async (req,res,next) => {
-         try {
+      async generate(req,res,next) {
+    try {
       const parsed = generateScheduleSchema.safeParse(req.body);
 
       if (!parsed.success) {
@@ -55,28 +57,27 @@ export const ScheduleController = (scheduleService: ScheduleService): IScheduleC
       }
 
       const { topic, durationUnit, durationValue } = parsed.data;
+      const requestId = uuidv4(); // Unique ID for tracking
 
-      // Option 1: Generate synchronously (original behavior)
-      const plan = await scheduleService.generateSchedule({topic,durationUnit,durationValue});
+      // Add job to queue
+      const job = await scheduleGenerationQueue.add('generate-schedule', {
+        topic,
+        durationUnit,
+        durationValue,
+        userId: req.user?.userId, // Optional: if user is authenticated
+        requestId,
+      });
 
-      return res.json({ plan });
-
-      // Option 2: Queue it for background processing (recommended for long-running tasks)
-      // const job = await scheduleGenerationQueue.add('generate', {
-      //   topic,
-      //   durationUnit,
-      //   durationValue,
-      //   userId: req.user?.id, // From auth middleware
-      // });
-      //
-      // return res.status(202).json({
-      //   message: 'Schedule generation started',
-      //   jobId: job.id,
-      // });
+      return res.status(202).json({
+        message: 'Schedule generation started',
+        jobId: job.id,
+        requestId,
+        statusUrl: `/api/v1/schedules/generation/status/${job.id}`,
+      });
     } catch (error) {
       next(error);
     }
-      },
+  },
 
 /**
  * @swagger

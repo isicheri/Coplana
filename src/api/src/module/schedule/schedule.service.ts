@@ -2,7 +2,6 @@ import { PrismaClient } from "@prisma/client";
 import {prisma} from "../../lib/prisma.js"
 import { CreateScheduleDto, GenerateScheduleDto } from "./schema/schedule.schema.js";
 import HttpError from "../../config/handler/HttpError/HttpError.js";
-// import {studyPlannerAgent} from "@agent/agents";
 import { studyPlannerAgent } from "../../mastra/agents/index.js";
 
 
@@ -16,7 +15,7 @@ export class ScheduleService {
  /**
    * Generate a study plan using AI
 */
-async generateSchedule({topic,durationUnit,durationValue}:GenerateScheduleDto) {
+static async generatePlan({topic,durationUnit,durationValue}:GenerateScheduleDto) {
 
 
     try {

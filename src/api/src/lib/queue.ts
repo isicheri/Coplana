@@ -7,6 +7,15 @@ export enum QueueName {
   REMINDERS = 'reminders',
   ANALYTICS = 'analytics',
   EMAIL = 'email',
+  Schedule = 'schedule'
+}
+
+export interface ScheduleGenerationJobData {
+  topic: string;
+  durationUnit: 'days' | 'weeks' | 'months';
+  durationValue: number;
+  userId?: string; // Optional - if user is logged in
+  requestId: string; // Unique ID to track this request
 }
 
 // Default queue options
@@ -49,6 +58,17 @@ export const emailQueue = new Queue(QueueName.EMAIL, {
     attempts: 5, // Retry emails more
   },
 });
+
+export const scheduleGenerationQueue = new Queue(
+  QueueName.Schedule,
+  {
+    ...defaultQueueOptions,
+    defaultJobOptions: {
+      ...defaultQueueOptions.defaultJobOptions,
+      attempts: 5
+    }
+  }
+);
 
 // Queue Manager class for easy access in services
 export class QueueManager {
@@ -131,6 +151,8 @@ export class QueueManager {
         throw new Error(`Unknown queue: ${queueName}`);
     }
   }
+
+
 }
 
 export default QueueManager;
