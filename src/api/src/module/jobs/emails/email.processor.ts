@@ -1,7 +1,6 @@
 import { Worker, Job  } from 'bullmq';
 import { bullmqConnection } from '../../../config/redis/redis.config.js';
 import { QueueName } from '../../../lib/queue.js';
-import { Resend } from 'resend';
 import EmailService from '../../../lib/service/email.service.js';
 
 

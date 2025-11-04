@@ -32,7 +32,7 @@ export async function POST(request: Request) {
     ]);
 
     // 🔹 Add this log
-console.log("raw agent output:", result.text);
+    console.log("raw agent output:", result.text);
 
     const raw = (result.text ?? "").trim();
     if (!raw) return NextResponse.json({ error: "Agent returned no output" }, { status: 502 });

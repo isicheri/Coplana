@@ -111,10 +111,6 @@ const swaggerDefinition: SwaggerDefinition = {
       description: 'Quiz generation and attempts',
     },
     {
-      name: 'Analytics',
-      description: 'User progress and analytics',
-    },
-    {
       name: 'Jobs',
       description: 'Background job status',
     },
