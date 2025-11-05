@@ -1,8 +1,9 @@
 import { PrismaClient } from "@prisma/client";
 import {prisma} from "../../lib/prisma.js"
-import { CreateScheduleDto, GenerateScheduleDto } from "./schema/schedule.schema.js";
+import { CreateScheduleDto, GenerateScheduleDto, ScheduleListQuery } from "./schema/schedule.schema.js";
 import HttpError from "../../config/handler/HttpError/HttpError.js";
 import { studyPlannerAgent } from "../../mastra/agents/index.js";
+import { promise } from "zod/v4/index.js";
 
 
 export class ScheduleService {
@@ -106,8 +107,10 @@ static async generatePlan({topic,durationUnit,durationValue}:GenerateScheduleDto
   /**
    * Get all schedules for a user
    */
-  async getUserSchedules(userId: string) {
-    return await prisma.schedule.findMany({
+  async getUserSchedules(userId: string,{page,limit}: ScheduleListQuery) {
+    const skip = Math.max(0, (page - 1) * limit);
+    const [schedules,total] = await Promise.all([
+    this.prisma.schedule.findMany({
       where: { userId },
       include: {
         planItems: {
@@ -130,7 +133,12 @@ static async generatePlan({topic,durationUnit,durationValue}:GenerateScheduleDto
         },
       },
       orderBy: { createdAt: 'desc' },
-    });
+      skip,
+      take: limit
+    }),
+    this.prisma.schedule.count({where: { userId }})
+    ])
+    return { schedules, total, page, limit };
   }
 
    /**

@@ -1,6 +1,6 @@
 import express from "express";
 import { ScheduleService } from "./schedule.service.js";
-import { createScheduleSchema, formatZodValidationError, generateScheduleSchema, updateReminderSchema } from "./schema/schedule.schema.js";
+import { createScheduleSchema, formatZodValidationError, generateScheduleSchema, ScheduleListQuerySchema, updateReminderSchema } from "./schema/schedule.schema.js";
 import { v4 as uuidv4 } from 'uuid';
 import { scheduleGenerationQueue } from "../../lib/queue.js";
 
@@ -121,11 +121,24 @@ export const ScheduleController = (scheduleService: ScheduleService): IScheduleC
       list: async(req,res,next) => {
           try {
       const userId = req.user?.userId; // From auth middleware
-      if (!userId) {
-        return res.status(401).json({ error: 'Unauthorized' });
-      }
-      const schedules = await scheduleService.getUserSchedules(userId);
-      return res.json({ schedules });
+      const parsed = await ScheduleListQuerySchema.safeParseAsync(req.query);
+
+       if (!parsed.success) {
+        if (process.env.NODE_ENV === 'development') console.error(parsed.error);
+  return res.status(400).json({
+    error: 'Validation failed',
+    details: formatZodValidationError(parsed),
+  });
+}
+
+const { page, limit } = parsed.data;
+
+if (!userId) {
+  return res.status(401).json({ error: 'Unauthorized' });
+}
+
+const schedules = await scheduleService.getUserSchedules(userId, { page, limit });
+return res.status(200).json({ schedules });;
     } catch (error) {
       next(error);
     }
