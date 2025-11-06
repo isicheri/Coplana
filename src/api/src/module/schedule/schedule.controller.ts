@@ -3,6 +3,7 @@ import { ScheduleService } from "./schedule.service.js";
 import { createScheduleSchema, formatZodValidationError, generateScheduleSchema, ScheduleListQuerySchema, updateReminderSchema } from "./schema/schedule.schema.js";
 import { v4 as uuidv4 } from 'uuid';
 import { scheduleGenerationQueue } from "../../lib/queue.js";
+import HttpError from "../../config/handler/HttpError/HttpError.js";
 
 interface IScheduleController {
     generate: (req: express.Request,res: express.Response,next: express.NextFunction) => Promise<any>;
@@ -109,18 +110,20 @@ export const ScheduleController = (scheduleService: ScheduleService): IScheduleC
         },
 
 
-        /**
+/**
  * @swagger
  * /api/v1/schedules/personal:
  *   get:
- *     summary: Get user schedules
+ *     summary: Get user schedules (paginated)
+ *     description: Retrieve the authenticated user's schedules with pagination support.
  *     tags: [Schedules]
  *     security:
  *       - bearerAuth: []
  */
       list: async(req,res,next) => {
           try {
-      const userId = req.user?.userId; // From auth middleware
+      const userId = req.user?.userId;
+      if (!userId) return new HttpError("unauthorized",401,"unauthorize error",null);
       const parsed = await ScheduleListQuerySchema.safeParseAsync(req.query);
 
        if (!parsed.success) {
@@ -129,16 +132,12 @@ export const ScheduleController = (scheduleService: ScheduleService): IScheduleC
     error: 'Validation failed',
     details: formatZodValidationError(parsed),
   });
-}
+                            }
 
-const { page, limit } = parsed.data;
+       const { page, limit } = parsed.data;
 
-if (!userId) {
-  return res.status(401).json({ error: 'Unauthorized' });
-}
-
-const schedules = await scheduleService.getUserSchedules(userId, { page, limit });
-return res.status(200).json({ schedules });;
+      const data = await scheduleService.getUserSchedules(userId, { page, limit });
+      return res.status(200).json(data);
     } catch (error) {
       next(error);
     }

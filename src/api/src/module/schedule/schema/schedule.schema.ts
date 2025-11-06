@@ -39,7 +39,7 @@ export const updateReminderSchema = z.object({
 
 
 export const ScheduleListQuerySchema = z.object({
-  page: z.coerce.number().nonnegative().optional().default(0),
+  page: z.coerce.number().nonnegative().optional().default(1),
   limit: z.coerce.number().optional().default(10),
 });
 
@@ -51,6 +51,8 @@ export function formatZodValidationError(parsedBody: z.SafeParseError<any>) {
   }));
   return formattedErrors
 }
+
+
 
 export type GenerateScheduleDto = z.infer<typeof generateScheduleSchema>;
 export type CreateScheduleDto = z.infer<typeof createScheduleSchema>;

@@ -108,7 +108,7 @@ static async generatePlan({topic,durationUnit,durationValue}:GenerateScheduleDto
    * Get all schedules for a user
    */
   async getUserSchedules(userId: string,{page,limit}: ScheduleListQuery) {
-    const skip = Math.max(0, (page - 1) * limit);
+    const skip = (page - 1) * limit;
     const [schedules,total] = await Promise.all([
     this.prisma.schedule.findMany({
       where: { userId },
