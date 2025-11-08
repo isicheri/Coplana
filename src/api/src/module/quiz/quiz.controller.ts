@@ -349,19 +349,19 @@ export const quizController = (quizService: QuizService,quizAttemtService: QuizA
   }
         },
  
-        
+
         /**
  * @swagger
- * /quiz/generate:
+ * /api/v1/quiz/generate:
  *   post:
+ *  
  *     summary: Start quiz generation for a given plan item
  *     description: |
  *       Validates the request body and enqueues a quiz generation job using BullMQ.
  *       The quiz will be generated asynchronously by the background worker (`quizWorker`).
  *       Returns a 202 Accepted response with a job ID and tracking request ID.
  *
- *     tags:
- *       - Quiz
+ *     tags: [Quizzes]
  *
  *     security:
  *       - bearerAuth: []

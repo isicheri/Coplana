@@ -2,7 +2,7 @@ import { Worker, Job } from 'bullmq';
 import { bullmqConnection } from '../../../config/redis/redis.config.js';
 import { QueueName } from '../../../lib/queue.js';
 import { QuizService } from '../../quiz/quiz.service.js';
-import HttpError from '@/api/src/config/handler/HttpError/HttpError.js';
+import HttpError from '../../../config/handler/HttpError/HttpError.js';
 
 interface QuizJobData {
   planItemId: string;
