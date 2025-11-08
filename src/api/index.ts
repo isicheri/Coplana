@@ -10,7 +10,6 @@ import config from './src/config/index.js';
 import HttpError from './src/config/handler/HttpError/HttpError.js';
 import {swaggerSpec} from "./src/config/swagger/swagger.config.js"
 
-
 dotenv.config();
 
 const app = express();
@@ -87,6 +86,7 @@ app.get('/api/test', (req, res) => {
 app.use((err: HttpError, req: express.Request, res: express.Response, next: express.NextFunction) => {
   console.error('Error:', err);
   res.status(err.status || 500).json({
+    success: false,
     error: err.message || 'Internal server error',
     ...(config.NODE_ENV === 'development' && { stack: err.stack })
   });
