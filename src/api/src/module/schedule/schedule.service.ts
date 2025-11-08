@@ -3,7 +3,7 @@ import {prisma} from "../../lib/prisma.js"
 import { CreateScheduleDto, GenerateScheduleDto, ScheduleListQuery } from "./schema/schedule.schema.js";
 import HttpError from "../../config/handler/HttpError/HttpError.js";
 import { studyPlannerAgent } from "../../mastra/agents/index.js";
-import { promise } from "zod/v4/index.js";
+
 
 
 export class ScheduleService {

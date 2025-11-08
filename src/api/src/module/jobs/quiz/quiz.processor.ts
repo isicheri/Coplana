@@ -1,39 +1,47 @@
 import { Worker, Job } from 'bullmq';
 import { bullmqConnection } from '../../../config/redis/redis.config.js';
 import { QueueName } from '../../../lib/queue.js';
-import { prisma } from '../../../lib/prisma.js';
+import { QuizService } from '../../quiz/quiz.service.js';
+import HttpError from '@/api/src/config/handler/HttpError/HttpError.js';
+
 interface QuizJobData {
   planItemId: string;
-  topic: string;
-  userId: string;
+  userId: string,
+  requestId: string
 }
 
-export const quizWorker = new Worker(
+export const quizWorker = new Worker<QuizJobData>(
   QueueName.QUIZ_GENERATION,
   async (job: Job<QuizJobData>) => {
-    const { planItemId, topic, userId } = job.data;
-
+    const { planItemId,requestId,userId } = job.data;
     try {
-      await job.updateProgress(10);
-      console.log(`🎯 Generating quiz for topic: ${topic}`);
+    
+      if(!userId) {
+        throw new HttpError("User not found",401,"Authorization error",null);
+      }
 
-      // TODO: Call Mastra AI agent to generate quiz questions
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      console.log(`🎯 Starting quiz generation for planItemId: ${planItemId}`);
+      await job.updateProgress(10);
+
+      await new Promise((resolve) => setTimeout(resolve, 2000));
       await job.updateProgress(50);
 
-      const quiz = await prisma.quiz.create({
-        data: {
-          title: `${topic} Quiz`,
-          planItemId,
-        },
-      });
-
+      // ✅ Create quiz from AI or predefined template
+      const quiz = await QuizService.createQuiz({ planItemId });
       await job.updateProgress(100);
-      console.log(`✅ Quiz generated successfully: ${quiz.id}`);
 
-      return { quizId: quiz.id, questionsCount: 0 };
+        const result = {
+        requestId,
+        quiz,
+        userId,
+        generatedAt: new Date().toISOString(),
+      };
+
+      console.log(`✅ Quiz successfully generated for ${planItemId}`);
+      return result;
     } catch (error) {
-      console.error('❌ Quiz generation failed:', error);
+      console.error(`❌ Quiz generation failed for ${planItemId}:`, error);
+      // Propagate the error so BullMQ logs the job as failed
       throw error;
     }
   },
@@ -43,6 +51,7 @@ export const quizWorker = new Worker(
   }
 );
 
+// ✅ Event listeners
 quizWorker.on('completed', (job) => {
   console.log(`✅ Quiz job ${job.id} completed`);
 });

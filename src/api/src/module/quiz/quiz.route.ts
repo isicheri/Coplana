@@ -15,5 +15,6 @@ quizRouter.post("/:quizId/start",responseHandler(controller.start));
 quizRouter.post("/:quizId/submit",responseHandler(controller.submit));
 quizRouter.get("/attempts/:attemptId",responseHandler(controller.getQuizAttempt))
 quizRouter.post("/attempts/:attemptId/resume",responseHandler(controller.resumeQuiz))
+quizRouter.post("/generate",responseHandler(controller.generateQuiz))
 
 export default quizRouter;

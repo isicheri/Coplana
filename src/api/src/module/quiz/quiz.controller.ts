@@ -1,23 +1,25 @@
 import express from "express";
 import { QuizService } from "./quiz.service.js";
-import { startQuizSchema,submitQuizSchema } from "./schema/quiz.schema.js";
+import { createQuizSchema, startQuizSchema,submitQuizSchema } from "./schema/quiz.schema.js";
 import { formatZodValidationError } from "../auth/schema/auth.schema.js";
 import { QuizAttemtService } from "../quizattempt/quizAttempt.service.js";
-import { tryCatch } from "bullmq";
+import { emailQueue } from "../../lib/queue.js";
 import HttpError from "../../config/handler/HttpError/HttpError.js";
+import {v4 as uuidv4} from "uuid";
 
 interface IQuizController {
     start: (req:express.Request,res: express.Response,next: express.NextFunction) => Promise<any>,
     submit: (req:express.Request,res: express.Response,next: express.NextFunction) => Promise<any>,
     getQuizAttempt: (req:express.Request,res: express.Response,next: express.NextFunction) => Promise<any>,
-    resumeQuiz: (req:express.Request,res:express.Response,next: express.NextFunction) => Promise<any>
+    resumeQuiz: (req:express.Request,res:express.Response,next: express.NextFunction) => Promise<any>,
+    generateQuiz: (req:express.Request,res: express.Response, next: express.NextFunction) => Promise<any>
 }
 
 export const quizController = (quizService: QuizService,quizAttemtService: QuizAttemtService):IQuizController => {
 
     return {
 
-     /**
+       /**
  * @swagger
  * /api/v1/quiz/{quizId}/start:
  *   post:
@@ -212,7 +214,7 @@ export const quizController = (quizService: QuizService,quizAttemtService: QuizA
   }
         },
         
- /**
+        /**
  * @swagger
  * /api/v1/quiz/attempts/{attemptId}:
  *   get:
@@ -275,7 +277,7 @@ export const quizController = (quizService: QuizService,quizAttemtService: QuizA
  *       500:
  *         description: Server error.
  */
-getQuizAttempt: async (req, res, next) => {
+        getQuizAttempt: async (req, res, next) => {
   try {
     const attemptId = req.params.attemptId;
     if (!attemptId) {
@@ -287,10 +289,9 @@ getQuizAttempt: async (req, res, next) => {
   } catch (error) {
     next(error);
   }
-},
+        },
 
-
-/**
+        /**
  * @swagger
  * /api/v1/quiz/attempts/{attemptId}/resume:
  *   post:
@@ -334,7 +335,7 @@ getQuizAttempt: async (req, res, next) => {
  *       500:
  *         description: Server error.
  */
-resumeQuiz: async (req, res, next) => {
+        resumeQuiz: async (req, res, next) => {
   try {
     const { attemptId } = req.params;
     if (!attemptId) {
@@ -346,8 +347,115 @@ resumeQuiz: async (req, res, next) => {
   } catch (error) {
     next(error);
   }
-},
+        },
+ 
+        
+        /**
+ * @swagger
+ * /quiz/generate:
+ *   post:
+ *     summary: Start quiz generation for a given plan item
+ *     description: |
+ *       Validates the request body and enqueues a quiz generation job using BullMQ.
+ *       The quiz will be generated asynchronously by the background worker (`quizWorker`).
+ *       Returns a 202 Accepted response with a job ID and tracking request ID.
+ *
+ *     tags:
+ *       - Quiz
+ *
+ *     security:
+ *       - bearerAuth: []
+ *
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               planItemId:
+ *                 type: string
+ *                 example: "clz9p0l0a0000tkj0h2xtv49z"
+ *
+ *     responses:
+ *       202:
+ *         description: Quiz generation job successfully queued.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "quiz generation started"
+ *                 jobId:
+ *                   type: string
+ *                   example: "bullmq-job-12345"
+ *                 requestId:
+ *                   type: string
+ *                   example: "2b9c5e2b-1e2a-47c8-aef7-73d69e63b8a4"
+ *                 statusUrl:
+ *                   type: string
+ *                   example: "/api/v1/quiz/status/2b9c5e2b-1e2a-47c8-aef7-73d69e63b8a4"
+ *
+ *       400:
+ *         description: Validation failed.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: "Validation failed"
+ *                 details:
+ *                   type: object
+ *                   example:
+ *                     planItemId: "Required field"
+ *
+ *       401:
+ *         description: Unauthorized - Missing or invalid JWT.
+ *       500:
+ *         description: Internal server error or queue failure.
+ *
+ * @function generateQuiz
+ * @memberof QuizController
+ * @param {Request} req - Express request object (must include `planItemId` in body and authenticated user).
+ * @param {Response} res - Express response object.
+ * @param {NextFunction} next - Express next middleware function.
+ * @returns {Promise<void>} Returns a JSON response confirming job queueing or validation errors.
+ */
+        generateQuiz: async (req,res,next) => {
+            try {
+     const parsed = await createQuizSchema.safeParseAsync(req.body);
+     if (!parsed.success) {
+      return res.status(400).json({
+        error: 'Validation failed',
+        details: formatZodValidationError(parsed),
+      });
+           }
+        const {planItemId} = parsed.data;
+        const requestId = uuidv4(); 
 
+        const job = await emailQueue.add("quiz-generation",{
+          planItemId,
+          userId: req.user?.userId,
+          requestId
+        })
 
+          return res.status(202).json({
+        message: 'quiz generation started',
+        jobId: job.id,
+        requestId,
+        statusUrl: ``,
+      });
+       
+          } catch (error) {
+           next(error); 
+          }
+        }
+      
     }
 }
+
+

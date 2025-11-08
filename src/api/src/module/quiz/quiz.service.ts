@@ -1,7 +1,8 @@
 import { PrismaClient } from "@prisma/client";
 import { prisma } from "../../lib/prisma.js";
-import { startQuizSchemaDto, submitQuizSchemaDto,UserAnswerData } from "./schema/quiz.schema.js";
+import { createQuizSchemaDto, QuizAIResponseSchema, startQuizSchemaDto, submitQuizSchemaDto,UserAnswerData } from "./schema/quiz.schema.js";
 import HttpError from "../../config/handler/HttpError/HttpError.js";
+import { studyPlannerAgent } from "../../mastra/agents/index.js";
 import config from "../../config/index.js";
 
 
@@ -179,6 +180,115 @@ export class QuizService {
       };
   }  
 
+  static  async createQuiz({planItemId}: createQuizSchemaDto) {
+     // Get the plan item with subtopics
+        const planItem = await prisma.planItem.findUnique({
+          where: { id: planItemId },
+          include: {
+            subtopics: true,
+            quiz: true // Check if quiz already exists
+          }
+        });
+    
+        if (!planItem) {
+          throw new HttpError("Plan item not found",404,"Validation error",null);
+        }
+    
+        // Check if all subtopics are completed
+        const allCompleted = planItem.subtopics.every(st => st.completed);
+        if (!allCompleted) {
+          throw new  HttpError("Cannot generate quiz. Please complete all subtopics first.",400,"",null);
+        }
+    
+        // If quiz already exists, delete it first (regeneration)
+        if (planItem.quiz) {
+          console.log("🗑️ Deleting existing quiz for regeneration...");
+          await prisma.quiz.delete({
+            where: { id: planItem.quiz.id }
+          });
+        }
+    
+        console.log("🎯 Generating quiz for:", planItem.topic);
+    
+        // Prepare data for agent
+        const completedSubTopics = planItem.subtopics.map(st => st.title);
+        const completedTopic = planItem.topic;
+    
+        // Call the agent to generate quiz
+        const agentResponse = await studyPlannerAgent.generateVNext([
+          {
+            role: "user",
+            content: `Call the "quiz-generator-tool" with this exact JSON input:
+    {
+      "completedTopic": "${completedTopic}",
+      "completedSubTopics": ${JSON.stringify(completedSubTopics)}
+    }
+    
+    Return ONLY the pure JSON output from the tool. Do not add text, markdown, or explanation. The final response must match this format:
+    {
+      "title": "string",
+      "questions": [
+        {
+          "question": "string",
+          "options": ["string", "string", "string", "string"],
+          "answer": "A"
+        }
+      ]
+    }`
+          }
+        ]);
+    
+        // Parse the quiz result
+        const quizData = JSON.parse(agentResponse.text);
+    
+        // Validate quiz data structure
+        if (!quizData.title || !Array.isArray(quizData.questions) || quizData.questions.length === 0) {
+          throw new Error("Invalid quiz data structure from agent");
+        }
 
+        const validatedQuiz = QuizAIResponseSchema.parse(quizData);
+    
+        // Save quiz to database
+     const generatedQuiz = await prisma.$transaction(async (tx) => {
+  if (planItem.quiz) {
+    console.log("🗑️ Deleting existing quiz for regeneration...");
+    await tx.quiz.delete({ where: { id: planItem.quiz.id } });
+  }
+
+  return await tx.quiz.create({
+    data: {
+      planItemId: planItem.id,
+      title: quizData.title,
+      questions: {
+        create: quizData.questions.map((q: any) => ({
+          question: q.question,
+          correctAnswer: q.answer,
+          options: {
+            create: q.options.map((opt: string, i: number) => ({
+              label: String.fromCharCode(65 + i),
+              content: opt,
+            })),
+          },
+        })),
+      },
+    },
+    include: {
+      questions: { include: { options: true } },
+    },
+  });
+});
+
+
+    
+        console.log("✅ Quiz generated successfully!");
+        console.log("Quiz ID:", generatedQuiz.id);
+        console.log("Questions:", generatedQuiz.questions.length);
+    
+        return {
+          success: true,
+          quiz: generatedQuiz,
+          message: "Quiz generated successfully!"
+        };
+   }
 
 }
