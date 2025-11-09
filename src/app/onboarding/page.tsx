@@ -27,6 +27,7 @@ const page = (props: Props) => {
   const [authMode, setAuthMode] = useState<"login" | "signup">("signup");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [message,setMessage] = useState<string | null>()
   const [email, setEmail] = useState("");
   const [userId, setUserId] = useState<string | null>(null);
   const [userSchedules, setUserSchedules] = useState<ScheduleType[]>([]);
@@ -69,19 +70,15 @@ const page = (props: Props) => {
     setError(null);
     setLoading(true);
     try {
-      const res = await fetch("/api/users", {
+      const res = await fetch(`${Api_Url}/api/v1/auth/signup`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, username }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Failed to create user");
-      setUserId(data.user.id);
-      window.location.href = "/dashboard";
-
-      localStorage.setItem("userId", data.user.id);
-      localStorage.setItem("email", email);
-      localStorage.setItem("username", username);
+      // console.log(data)
+      setMessage(data.message);
     } catch (err: any) {
       setError(err.message);
       console.error("SIGNUP ERROR:", err);
@@ -219,6 +216,12 @@ const page = (props: Props) => {
           {error && (
             <div className="mb-4 p-3 bg-yellow-400/15 px-6 rounded-full text-yellow-700 text-sm">
               {error}
+            </div>
+          )}
+          
+            {message && (
+            <div className="mb-4 p-3 bg-yellow-400/15 px-6 rounded-full text-yellow-700 text-sm">
+              {message}
             </div>
           )}
 

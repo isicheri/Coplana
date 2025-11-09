@@ -1,10 +1,8 @@
 // app/layout.tsx
 import type { Metadata } from "next";
 import { Darker_Grotesque, Geist, Geist_Mono } from "next/font/google";
-import { CopilotKit } from "@copilotkit/react-core";
 // import { Toaster } from "sooner";
-import "./globals.css";
-import "@copilotkit/react-ui/styles.css";
+import "./globals.css";;
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -36,10 +34,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${darkerGrotesque.className} ${geistMono.variable} antialiased`}
       >
-        <CopilotKit runtimeUrl="/api/copilotkit" agent="studyPlannerAgent">
           {children}
-        </CopilotKit>
-
         {/* 👇 Add Sonner Toaster here (globally available) */}
         {/* <Toaster position="top-right" richColors /> */}
       </body>
