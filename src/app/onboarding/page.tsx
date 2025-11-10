@@ -22,6 +22,12 @@ type ScheduleType = {
   planItems: PlanItem[];
 };
 
+type StoredUser = {
+  id: string,
+  email: string,
+  username: string
+}
+
 const page = (props: Props) => {
   const [authMode, setAuthMode] = useState<"login" | "signup">("signup");
   const [loading, setLoading] = useState(false);
@@ -35,13 +41,13 @@ const page = (props: Props) => {
 
   //Auto-login
   useEffect(() => {
-    const savedUserId = localStorage.getItem("userId");
-    const savedEmail = localStorage.getItem("email");
-    const savedUsername = localStorage.getItem("username");
-    if (savedUserId && savedEmail && savedUsername) {
-      setUserId(savedUserId);
-      setEmail(savedEmail);
-      setUsername(savedUsername);
+    const user_item = localStorage.getItem("user");
+    if(!user_item) return;
+    const user: StoredUser = JSON.parse(user_item) as StoredUser;
+    if (!user) {
+      setUserId(user.id);
+      setEmail(user.email);
+      setUsername(user.username);
       window.location.href = "/dashboard";
     }
   }, []);
@@ -69,7 +75,7 @@ const page = (props: Props) => {
     setError(null);
     setLoading(true);
     try {
-      const res = await fetch(`${process.env.API_URL}/api/v1/auth/signup`, {
+      const res = await fetch(`http://localhost:5000/api/v1/auth/signup`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, username }),
@@ -86,32 +92,41 @@ const page = (props: Props) => {
     }
   }
 
-  async function loginUser(e: React.FormEvent) {
-    e.preventDefault();
-    setError(null);
-    setLoading(true);
-    try {
-      const res = await fetch(`${process.env.API_URL}/api/v1/auth/login`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, username }),
-      });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "Login failed");
-      setUserId(data.user.id);
-      setUsername(data.user.username);
-      setEmail(data.user.email);
-      window.location.href = "/dashboard";
-      localStorage.setItem("userId", data.user.id);
-      localStorage.setItem("email", data.user.email);
-      localStorage.setItem("username", data.user.username);
-      await fetchUserSchedules();
-    } catch (err: any) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
+ 
+   async function loginUser(e: React.FormEvent) {
+  e.preventDefault();
+  setError(null);
+  setLoading(true);
+  try {
+    const res = await fetch(`http://localhost:5000/api/v1/auth/login`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email }),
+    });
+    const data = await res.json();
+
+    if (!res.ok) throw new Error(data.error || "Login failed");
+
+    // If verification code is sent successfully
+    if (data.message === "Verification code sent to your email") {
+      setMessage(data.message);
+      // redirect to verify page
+      setTimeout(() => {
+        window.location.href = `/verify-login?email=${encodeURIComponent(
+          data.email
+        )}`;
+      }, 2000);
+    } else {
+      setError("Unexpected response from server");
     }
+  } catch (err: any) {
+    setError(err.message);
+  } finally {
+    setLoading(false);
   }
+}
+
+
   return (
     <>
       <main className="min-h-screen  bg-gradient-to-br from-purple-500 to-blue-700 flex flex-col gap-2 items-center justify-center">
