@@ -3,7 +3,6 @@ import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
-import {Api_Url} from "../lib/state"
 
 type Props = {};
 
@@ -70,7 +69,7 @@ const page = (props: Props) => {
     setError(null);
     setLoading(true);
     try {
-      const res = await fetch(`${Api_Url}/api/v1/auth/signup`, {
+      const res = await fetch(`${process.env.API_URL}/api/v1/auth/signup`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, username }),
@@ -92,7 +91,7 @@ const page = (props: Props) => {
     setError(null);
     setLoading(true);
     try {
-      const res = await fetch(`${Api_Url}/api/v1/auth/login`, {
+      const res = await fetch(`${process.env.API_URL}/api/v1/auth/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, username }),
