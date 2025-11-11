@@ -42,7 +42,7 @@ const page = (props: Props) => {
   useEffect(() => {
     const user_item = localStorage.getItem("user");
     if(!user_item) return;
-    const user = (JSON.parse(user_item) as unknown) as {id: string,email: string,username:string};
+    const user = (JSON.parse(user_item) as unknown) as StoredUser;
     if (user) {
       setUserId(user.id);
       setEmail(user.email);

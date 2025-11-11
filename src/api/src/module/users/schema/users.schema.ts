@@ -8,8 +8,11 @@ const sanitize = (val: string) =>
   });
 
 export const GetUserHistorySchema = z.object({
-   status: z.enum(["complete","incomplete"]).transform(sanitize)
-})
+  status: z
+    .enum(["completed", "incomplete"])
+    .optional()
+    .transform((val) => (val ? sanitize(val) : undefined)),
+});
 
 
 export type GetUserHistorySchemaDto = z.infer<typeof GetUserHistorySchema>

@@ -321,12 +321,12 @@ export default function StudyPlannerApp() {
     const response = await fetch(url, {
       method: "GET",
       headers: {
-        "Auhthorization": `Bearer ${token}`
+        "Authorization": `Bearer ${token}`
       }
     });
 
     if (!response.ok) {
-      throw new Error(`Failed to fetch quiz history: ${response.statusText}`);
+      throw new Error(`Failed to fetch quiz history: ${response}`);
     }
     const data = await response.json();
     console.log("user quiz history: ",data);
