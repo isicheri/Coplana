@@ -313,25 +313,21 @@ export default function StudyPlannerApp() {
 
   /* ------------------- Quiz ------------------- */
 
-  async function fetchUserQuizHistory(userId: string, status?: "completed" | "incomplete") {
-    
-    if(!userId) {
-    console.log("userId not found")
-      return;
-    }
-
+  async function fetchUserQuizHistory(status?: "completed" | "incomplete") {
     const url = status
-      ? `/api/users/${userId}/quiz-history?status=${status}`
-      : `/api/users/${userId}/quiz-history`;
+      ? `http://localhost:5000/api/v1/users/quiz-history?status=${status}`
+      : `http://localhost:5000/api/v1/users/quiz-history`;
 
     const response = await fetch(url, {
       method: "GET",
+      headers: {
+        "Auhthorization": `Bearer ${token}`
+      }
     });
 
     if (!response.ok) {
       throw new Error(`Failed to fetch quiz history: ${response.statusText}`);
     }
-
     const data = await response.json();
     console.log("user quiz history: ",data);
     return data;
@@ -369,7 +365,7 @@ useEffect(() => {
   async function loadQuizHistory() {
     if (!userId) return;
     try {
-      const quizHistoryData = await fetchUserQuizHistory(userId);
+      const quizHistoryData = await fetchUserQuizHistory();
       setUserQuizzes(quizHistoryData);
     } catch (err) {
       console.error("Failed to fetch quiz history:", err);
@@ -780,7 +776,7 @@ useEffect(() => {
       setSelectedQuizId(null);
       // Refresh quiz history after closing
       if (userId) {
-        fetchUserQuizHistory(userId).then(data => setUserQuizzes(data));
+        fetchUserQuizHistory().then(data => setUserQuizzes(data));
       }
     }}
   />

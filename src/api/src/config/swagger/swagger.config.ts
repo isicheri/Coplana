@@ -103,6 +103,10 @@ const swaggerDefinition: SwaggerDefinition = {
       description: 'User authentication endpoints',
     },
     {
+    name: "Users",
+    description: "User management endpoints"
+    },
+    {
       name: 'Schedules',
       description: 'Study schedule management',
     },
