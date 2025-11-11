@@ -54,7 +54,7 @@ export default function VerifyLoginPage() {
         return;
       }
 
-      console.log("✅ Login success:", data);
+      // console.log("✅ Login success:", data);
 
       // Save token and user
       localStorage.setItem("token", data.token);

@@ -23,9 +23,9 @@ type ScheduleType = {
 };
 
 type StoredUser = {
-  id: string,
-  email: string,
-  username: string
+  id: string;
+  email: string;
+  username: string;
 }
 
 const page = (props: Props) => {
@@ -34,17 +34,16 @@ const page = (props: Props) => {
   const [error, setError] = useState<string | null>(null);
   const [message,setMessage] = useState<string | null>()
   const [email, setEmail] = useState("");
-  const [userId, setUserId] = useState<string | null>(null);
-  const [userSchedules, setUserSchedules] = useState<ScheduleType[]>([]);
+  const [_userId,setUserId] = useState<string | null>(null);
+  const [_userSchedules, setUserSchedules] = useState<ScheduleType[]>([]);
 
   const [username, setUsername] = useState("");
-
   //Auto-login
   useEffect(() => {
     const user_item = localStorage.getItem("user");
     if(!user_item) return;
-    const user: StoredUser = JSON.parse(user_item) as StoredUser;
-    if (!user) {
+    const user = (JSON.parse(user_item) as unknown) as {id: string,email: string,username:string};
+    if (user) {
       setUserId(user.id);
       setEmail(user.email);
       setUsername(user.username);
@@ -119,6 +118,24 @@ const page = (props: Props) => {
     } else {
       setError("Unexpected response from server");
     }
+  } catch (err: any) {
+    setError(err.message);
+  } finally {
+    setLoading(false);
+  }
+}
+
+async function resend_verfication_code(e: React.FormEvent) {
+  e.preventDefault();
+  try {
+      const res = await fetch(`http://localhost:5000/api/v1/auth/resend-verification`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email }),
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || "Something went wrong!");
+    setMessage(data.message)
   } catch (err: any) {
     setError(err.message);
   } finally {
@@ -239,39 +256,55 @@ const page = (props: Props) => {
             </div>
           )}
 
-          <form
-            onSubmit={authMode === "signup" ? createUser : loginUser}
-            className="space-y-4"
-          >
-            <input
-              className="w-full bg-wht/15 rounded-full p-3 px-6 outline-none bg-gradient-to-br from-transparent focus:border-wht focus:shadow-2xl focus:shadow-gry/20 text-gray"
-              type="email"
-              placeholder="Email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
-            <input
-              className="w-full bg-wht/15 rounded-full p-3 px-6 outline-none bg-gradient-to-br from-transparent focus:border-wht focus:shadow-2xl focus:shadow-gry/20 text-gray"
-              type="text"
-              placeholder="Username"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              required
-            />
+        <form
+  onSubmit={authMode === "signup" ? createUser : loginUser}
+  className="space-y-4"
+>
+  <input
+    className="w-full bg-wht/15 rounded-full p-3 px-6 outline-none bg-gradient-to-br from-transparent focus:border-wht focus:shadow-2xl focus:shadow-gry/20 text-gray"
+    type="email"
+    placeholder="Email"
+    value={email}
+    onChange={(e) => setEmail(e.target.value)}
+    required
+  />
+  <input
+    className="w-full bg-wht/15 rounded-full p-3 px-6 outline-none bg-gradient-to-br from-transparent focus:border-wht focus:shadow-2xl focus:shadow-gry/20 text-gray"
+    type="text"
+    placeholder="Username"
+    value={username}
+    onChange={(e) => setUsername(e.target.value)}
+    required
+  />
 
-            <button
-              className="gradient-btn duration-300 hover:brightness-110 hover:shadow-3xl hover:shadow-[#9c9c9c]/20 w-full flex text-lg items-center justify-center gap-2 bg-purple-500 text-white p-3 rounded-full"
-              disabled={loading}
-              type="submit"
-            >
-              {loading
-                ? "Hold on..."
-                : authMode === "signup"
-                ? "Get Started"
-                : "Sign in"}
-            </button>
-          </form>
+  <button
+    className="gradient-btn duration-300 hover:brightness-110 hover:shadow-3xl hover:shadow-[#9c9c9c]/20 w-full flex text-lg items-center justify-center gap-2 bg-purple-500 text-white p-3 rounded-full"
+    disabled={loading}
+    type="submit"
+  >
+    {loading
+      ? "Hold on..."
+      : authMode === "signup"
+      ? "Get Started"
+      : "Sign in"}
+  </button>
+
+  {/* 👇 Added this section */}
+  {authMode === "login" && (
+    <p className="text-sm text-center mt-3 text-white/80">
+      Email not verified?{" "}
+      <button
+        type="button"
+        onClick={resend_verfication_code}
+        className="text-blue-700 hover:underline ml-1"
+      >
+        Send verification link
+      </button>
+    </p>
+  )}
+</form>
+
+
         </motion.div>
       </main>
     </>

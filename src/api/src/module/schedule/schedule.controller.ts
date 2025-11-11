@@ -84,10 +84,111 @@ export const ScheduleController = (scheduleService: ScheduleService): IScheduleC
  * @swagger
  * /api/v1/schedules/save:
  *   post:
- *     summary: Create a schedule
+ *     summary: Create and save a user schedule
+ *     description: Creates a study schedule for a specific user with plan items and subtopics.
  *     tags: [Schedules]
  *     security:
  *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - userId
+ *               - title
+ *               - plan
+ *             properties:
+ *               userId:
+ *                 type: string
+ *                 format: uuid
+ *                 example: "c1d3a470-6b2f-4a93-b74b-f3229cbd091a"
+ *               title:
+ *                 type: string
+ *                 example: "Week 1 Study Plan"
+ *               plan:
+ *                 type: array
+ *                 items:
+ *                   type: object
+ *                   required:
+ *                     - range
+ *                     - topic
+ *                     - subtopics
+ *                   properties:
+ *                     range:
+ *                       type: string
+ *                       example: "Day 1-3"
+ *                     topic:
+ *                       type: string
+ *                       example: "Introduction to Biology"
+ *                     subtopics:
+ *                       type: array
+ *                       items:
+ *                         type: object
+ *                         required:
+ *                           - t
+ *                         properties:
+ *                           t:
+ *                             type: string
+ *                             example: "Cell structure"
+ *                           completed:
+ *                             type: boolean
+ *                             default: false
+ *                             example: false
+ *     responses:
+ *       201:
+ *         description: Schedule created successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 schedule:
+ *                   type: object
+ *                   properties:
+ *                     id:
+ *                       type: string
+ *                       example: "7a5d2b4e-8a6e-4a33-b89f-0c5b51a8d413"
+ *                     title:
+ *                       type: string
+ *                       example: "Week 1 Study Plan"
+ *                     userId:
+ *                       type: string
+ *                       format: uuid
+ *                       example: "c1d3a470-6b2f-4a93-b74b-f3229cbd091a"
+ *                     createdAt:
+ *                       type: string
+ *                       format: date-time
+ *                       example: "2025-11-06T10:45:22.000Z"
+ *       400:
+ *         description: Validation failed
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: "Validation failed"
+ *                 details:
+ *                   type: object
+ *                   example:
+ *                     field: "title"
+ *                     message: "Title is required"
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: false
+ *                 error:
+ *                   type: string
+ *                   example: "Internal server error"
  */
       save: async (req, res,next) => {
              try {

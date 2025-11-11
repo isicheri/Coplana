@@ -100,10 +100,10 @@ export default function StudyPlannerApp() {
   const [loadingMessage, setLoadingMessage] = useState("");
   
   const [savingSchedule, setSavingSchedule] = useState(false);
-  const [deletingSchedule, setDeletingSchedule] = useState(false);
-  const [enablingReminder, setEnablingReminder] = useState(false);
-  const [completingTask, setCompletingTask] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [_deletingSchedule, setDeletingSchedule] = useState(false);
+  const [_enablingReminder, setEnablingReminder] = useState(false);
+  const [_completingTask, setCompletingTask] = useState(false);
+  const [_error, setError] = useState<string | null>(null);
   const [tabMode, setTabMode] = useState<string>("schedules");
   const [expanded, setExpanded] = useState<boolean>(false);
   const [expandedSchedules, setExpandedSchedules] = useState<Set<string>>(new Set());
@@ -126,7 +126,7 @@ export default function StudyPlannerApp() {
   ];
   const [randomTopic, setRandomTopic] = useState<string>(studyTopics[0]);
 
-
+  const token = localStorage.getItem("token");
 
   function getRandomTopic() {
     const randomIndex = Math.floor(Math.random() * studyTopics.length);
@@ -153,10 +153,8 @@ export default function StudyPlannerApp() {
 
   //Auto-logout
   useEffect(() => {
-    const savedUserId = localStorage.getItem("userId");
-    const savedEmail = localStorage.getItem("email");
-    const savedUsername = localStorage.getItem("username");
-    if (!savedUserId && !savedEmail && !savedUsername) {
+    const user_item = localStorage.getItem("user");
+    if (!user_item) {
       window.location.href = "/onboarding";
     }
   }, []);
@@ -196,9 +194,9 @@ export default function StudyPlannerApp() {
     setGeneratedPlan([]);
     
     try {
-      const res = await fetch("/api/schedules/generate", {
+      const res = await fetch("http://localhost:5000/api/v1/schedules/generate", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json","Authorization": `Bearer ${token}` },
         body: JSON.stringify({
           topic: topicInput,
           durationUnit,
@@ -222,7 +220,7 @@ export default function StudyPlannerApp() {
     setError(null);
     setSavingSchedule(true);
     try {
-      const res = await fetch("/api/schedules", {
+      const res = await fetch("http://localhost:5000/api/v1/api/schedules/save", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -457,13 +455,13 @@ useEffect(() => {
   }
 
   useEffect(() => {
-    const savedUserId = localStorage.getItem("userId");
-    const savedEmail = localStorage.getItem("email");
-    const savedUsername = localStorage.getItem("username");
-    if (savedUserId && savedEmail && savedUsername) {
-      setUserId(savedUserId);
-      setEmail(savedEmail);
-      setUsername(savedUsername);
+     const user_item = localStorage.getItem("user");
+    if(!user_item) return;
+    const user = (JSON.parse(user_item) as unknown) as {id: string,email: string,username:string};
+    if (user) {
+      setUserId(user.id);
+      setEmail(user.email);
+      setUsername(user.username);
     }
   }, []);
 
