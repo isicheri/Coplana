@@ -3,7 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { CalendarCheck, ListTodo } from "lucide-react";
 // import {toast} from "sooner";
-import { useState, useEffect } from "react";
+import { useState, useEffect, use } from "react";
 import ScheduleCard from "../components/ScheduleCard";
 import { Prisma } from "@prisma/client";
 import QuizModal from "../components/QuizModal";
@@ -85,6 +85,7 @@ export default function StudyPlannerApp() {
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [userId, setUserId] = useState<string | null>("");
+  const [token,setToken] = useState<string | null>("");
 
 
   const [topicInput, setTopicInput] = useState("");
@@ -112,6 +113,12 @@ export default function StudyPlannerApp() {
   const [showQuizModal, setShowQuizModal] = useState(false);
     const [selectedQuizId, setSelectedQuizId] = useState<string | null>(null);
 
+ const [hasMore, setHasMore] = useState(true);
+const [loadingMore, setLoadingMore] = useState(false);
+  const [page,setPage] = useState<number>(1);
+
+  const [] = useState<number>();
+
   const studyTopics = [
     "Set Theory",
     "Linear Algebra",
@@ -126,7 +133,10 @@ export default function StudyPlannerApp() {
   ];
   const [randomTopic, setRandomTopic] = useState<string>(studyTopics[0]);
 
+useEffect(() => {
   const token = localStorage.getItem("token");
+  setToken(token)
+},[token])
 
   function getRandomTopic() {
     const randomIndex = Math.floor(Math.random() * studyTopics.length);
@@ -243,31 +253,46 @@ export default function StudyPlannerApp() {
     }
   }
 
-  async function fetchUserSchedules() {
-    if (!email || !username) return;
+  async function fetchUserSchedules(pageToLoad = 1) {
+  try {
+    setLoadingMore(true);
 
-    try {
-      const res = await fetch("/api/schedules/list", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, username }),
-      });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "Failed to fetch schedules");
+    const res = await fetch(`http://localhost:5000/api/v1/schedules/personal?page=${pageToLoad}&limit=5`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`,
+      },
+    });
+
+    if (!res.ok) throw new Error("Failed to fetch schedules");
+
+    const data = await res.json();
+
+    if (pageToLoad === 1) {
       setUserSchedules(data.schedules || []);
-    } catch (err: any) {
-      setError(err.message);
+    } else {
+      setUserSchedules(prev => [...prev, ...(data.schedules || [])]);
     }
+
+    // update pagination info
+    setHasMore(data.schedules?.length >= data.limit);
+    setPage(pageToLoad);
+  } catch (err) {
+    console.error(err);
+    setError("Failed to fetch schedules");
+  } finally {
+    setLoadingMore(false);
+  }
   }
 
   async function deleteUserSchedule(scheduleId: string) {
-    if (!userId || !scheduleId) return;
+    if (!scheduleId) return;
     try {
       setDeletingSchedule(true);
-      const res = await fetch("/api/schedules/delete", {
+      const res = await fetch(`http://localhost:5000/api/v1/schedules/${scheduleId}`, {
         method: "DELETE",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ userId, scheduleId }),
+        headers: { "Authorization": `Bearer ${token}` },
       });
       if (!res.ok) throw new Error("Failed to delete schedule");
       await fetchUserSchedules();
@@ -289,12 +314,10 @@ export default function StudyPlannerApp() {
         startDate = new Date().toISOString();
       }
 
-      const res = await fetch("/api/reminders/update", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+      const res = await fetch(`http://localhost:5000/api/v1/schedules/${scheduleId}/reminders`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json",   "Authorization": `Bearer ${token}` },
         body: JSON.stringify({
-          scheduleId,
-          userId: userId,
           toggleInput: enable,
           startDate: enable ? startDate : null,
         }),
@@ -336,10 +359,10 @@ export default function StudyPlannerApp() {
 async function regenerateQuiz(planItemId: string) {
   setError(null);
   try {
-    const res = await fetch("/api/quiz/regenerate", {
+    const res = await fetch("http://localhost:5000/api/v1/quiz/generate", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ planItemId })
+      headers: { "Content-Type": "application/json","Authorization": `Bearer ${token}` },
+      body: JSON.stringify({ planItemId }),
     });
 
     const data = await res.json();
@@ -376,8 +399,6 @@ useEffect(() => {
 }, [userId]);
 
 
-
-
   async function toggleSubtopicCompleted(
   scheduleId: string,
   range: string,
@@ -389,9 +410,11 @@ useEffect(() => {
   setError(null);
 
   try {
-    const res = await fetch("/api/subtopic/update", {
+    const res = await fetch("http://localhost:5000/api/v1/subtopic/update", {
       method: "PATCH",
-      headers: { "Content-Type": "application/json" },
+      headers: { "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+       },
       body: JSON.stringify({ scheduleId, range, subIdx, completed }),
     });
 
@@ -464,6 +487,32 @@ useEffect(() => {
   useEffect(() => {
     if (userId) fetchUserSchedules();
   }, [userId]);
+
+
+  //schedule infinit scroll effect
+  useEffect(() => {
+  let timeoutId: NodeJS.Timeout;
+
+  function handleScroll() {
+    if (timeoutId) clearTimeout(timeoutId);
+
+    timeoutId = setTimeout(() => {
+      if (loadingMore || !hasMore) return;
+      const scrollY = window.scrollY + window.innerHeight;
+      const fullHeight = document.documentElement.scrollHeight;
+
+      if (scrollY + 300 >= fullHeight) {
+        fetchUserSchedules(page + 1);
+      }
+    }, 200); // 200ms debounce
+  }
+
+  window.addEventListener("scroll", handleScroll);
+  return () => {
+    clearTimeout(timeoutId);
+    window.removeEventListener("scroll", handleScroll);
+  };
+}, [page, hasMore, loadingMore]);
 
   /* ------------------- Render ------------------- */
 
@@ -669,6 +718,12 @@ useEffect(() => {
             onRegenerateQuiz={regenerateQuiz}
           />
         ))}
+        {loadingMore && (
+  <div className="flex justify-center py-6 text-gray-500">
+    <Image src="/loader.svg" width={25} height={25} alt="loading" className="spinner" />
+    <span className="ml-2">Loading more schedules...</span>
+  </div>
+)}
       </div>
     )}
   </>

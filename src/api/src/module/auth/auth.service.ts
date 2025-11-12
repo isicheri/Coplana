@@ -33,7 +33,6 @@ export class AuthService {
 
   // Generate JWT token
   private generateJWT(userId: string, email: string): string {
-    
     return jwt.sign({userId,email},config.JWT_SECRET,{expiresIn: "7d"});
   }
 

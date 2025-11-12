@@ -193,21 +193,17 @@ export const ScheduleController = (scheduleService: ScheduleService): IScheduleC
       save: async (req, res,next) => {
              try {
       const parsed = createScheduleSchema.safeParse(req.body);
-
       if (!parsed.success) {
         return res.status(400).json({
           error: 'Validation failed',
           details: formatZodValidationError(parsed),
         });
       }
-
       const schedule = await scheduleService.createSchedule(parsed.data);
-
       return res.status(201).json({ schedule });
     } catch (error) {
       next(error);
     }
-
         },
 
 
@@ -220,7 +216,141 @@ export const ScheduleController = (scheduleService: ScheduleService): IScheduleC
  *     tags: [Schedules]
  *     security:
  *       - bearerAuth: []
+ *     parameters:
+ *       - name: page
+ *         in: query
+ *         required: false
+ *         schema:
+ *           type: integer
+ *           default: 1
+ *         description: Page number for pagination
+ *       - name: limit
+ *         in: query
+ *         required: false
+ *         schema:
+ *           type: integer
+ *           default: 10
+ *         description: Number of schedules per page
+ *     responses:
+ *       200:
+ *         description: User schedules fetched successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 schedules:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       id:
+ *                         type: string
+ *                         example: "c1d3a470-6b2f-4a93-b74b-f3229cbd091a"
+ *                       title:
+ *                         type: string
+ *                         example: "My Study Plan"
+ *                       createdAt:
+ *                         type: string
+ *                         example: "2025-11-11T14:22:30.000Z"
+ *                       updatedAt:
+ *                         type: string
+ *                         example: "2025-11-12T14:22:30.000Z"
+ *                       planItems:
+ *                         type: array
+ *                         items:
+ *                           type: object
+ *                           properties:
+ *                             id:
+ *                               type: string
+ *                               example: "7a5d2b4e-8a6e-4a33-b89f-0c5b51a8d413"
+ *                             range:
+ *                               type: string
+ *                               example: "Week 1"
+ *                             topic:
+ *                               type: string
+ *                               example: "Biology"
+ *                             subtopics:
+ *                               type: array
+ *                               items:
+ *                                 type: object
+ *                                 properties:
+ *                                   id:
+ *                                     type: string
+ *                                     example: "3e5d2a3b-7a1e-4b5f-b2a4-f1234c5a8b23"
+ *                                   title:
+ *                                     type: string
+ *                                     example: "Photosynthesis"
+ *                                   completed:
+ *                                     type: boolean
+ *                                     example: false
+ *                             quiz:
+ *                               type: object
+ *                               properties:
+ *                                 attempts:
+ *                                   type: array
+ *                                   items:
+ *                                     type: object
+ *                                     properties:
+ *                                       id:
+ *                                         type: string
+ *                                         example: "8f5d2a3b-7a1e-4b5f-b2a4-f1234c5a8b24"
+ *                                       completedAt:
+ *                                         type: string
+ *                                         nullable: true
+ *                                         example: "2025-11-11T15:22:30.000Z"
+ *                                       score:
+ *                                         type: number
+ *                                         example: 90
+ *                                       percentage:
+ *                                         type: number
+ *                                         example: 90
+ *                 total:
+ *                   type: integer
+ *                   example: 25
+ *                 page:
+ *                   type: integer
+ *                   example: 1
+ *                 limit:
+ *                   type: integer
+ *                   example: 10
+ *       400:
+ *         description: Validation failed
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: "Validation failed"
+ *                 details:
+ *                   type: object
+ *       401:
+ *         description: Unauthorized access
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: "unauthorized"
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: false
+ *                 error:
+ *                   type: string
+ *                   example: "Internal server error"
  */
+
       list: async(req,res,next) => {
           try {
       const userId = req.user?.userId;
@@ -317,6 +447,5 @@ export const ScheduleController = (scheduleService: ScheduleService): IScheduleC
       next(error);
     }
       }
-
   }
 }
