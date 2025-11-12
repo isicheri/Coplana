@@ -56,6 +56,8 @@ export default function QuizModal({ quizId, userId, onClose }: QuizModalProps) {
   const [elapsedTime, setElapsedTime] = useState<number>(0);
   const [error, setError] = useState<string | null>(null);
 
+  const [token,setToken] = useState<string | null>("");
+  
   // Timer effect - updates every second
   useEffect(() => {
     const timer = setInterval(() => {
@@ -69,13 +71,21 @@ export default function QuizModal({ quizId, userId, onClose }: QuizModalProps) {
     startQuiz();
   }, []);
 
+  
+  useEffect(() => {
+    const storedToken = localStorage.getItem("token");
+    if(!storedToken) return;
+    setToken(storedToken);
+  },[token])
+
   async function startQuiz() {
     try {
       setLoading(true);
-      const response = await fetch(`/api/quiz/${quizId}/start`, {
+      const response = await fetch(`http://localhost:5000/api/v1/quiz/${quizId}/start`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ userId }),
+        headers: { "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
+         },
       });
 
       if (!response.ok) throw new Error("Failed to start quiz");
@@ -118,9 +128,11 @@ export default function QuizModal({ quizId, userId, onClose }: QuizModalProps) {
         selectedOptionId: userAnswers[q.id] || null,
       }));
 
-      const response = await fetch(`/api/quiz/${quizId}/submit`, {
+      const response = await fetch(`http://localhost:5000/api/v1/quiz/${quizId}/submit`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
+         },
         body: JSON.stringify({
           attemptId: attempt.id,
           answers,
