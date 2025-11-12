@@ -10,7 +10,8 @@ interface IScheduleController {
     save: (req:express.Request,res:express.Response,next:express.NextFunction) => Promise<any>;
     list: (req:express.Request,res: express.Response,next:express.NextFunction) => Promise<any>,
     delete: (req: express.Request,res:express.Response,next:express.NextFunction) => Promise<any>
-    updateReminders: (req: express.Request,res: express.Response,next: express.NextFunction) => Promise<any>
+    updateReminders: (req: express.Request,res: express.Response,next: express.NextFunction) => Promise<any>,
+    generationStatus: (req: express.Request,res: express.Response,next: express.NextFunction) => Promise<any>
 }
 
 export const ScheduleController = (scheduleService: ScheduleService): IScheduleController =>  {
@@ -446,6 +447,61 @@ export const ScheduleController = (scheduleService: ScheduleService): IScheduleC
     } catch (error) {
       next(error);
     }
-      }
+      },
+
+      /**
+ * @swagger
+ * /api/v1/schedules/generation/status/{jobId}:
+ *   get:
+ *     summary: Get schedule generation job status
+ *     description: Check the current status or result of a schedule generation job.
+ *     tags: [Schedules]
+ *     parameters:
+ *       - name: jobId
+ *         in: path
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Job status retrieved
+ */
+async generationStatus(req, res, next) {
+  try {
+    const { jobId } = req.params;
+    const job = await scheduleGenerationQueue.getJob(jobId);
+
+    if (!job) {
+      return res.status(404).json({ error: "Job not found" });
+    }
+
+    const state = await job.getState();
+    const progress = job.progress;
+    const result = job.returnvalue;
+
+    if (state === "completed") {
+      return res.status(200).json({
+        status: "completed",
+        progress,
+        plan: result.plan,
+        metadata: result,
+      });
+    }
+
+    if (state === "failed") {
+      return res.status(200).json({
+        status: "failed",
+        progress,
+        error: job.failedReason,
+      });
+    }
+
+    // waiting / active
+    return res.status(200).json({ status: state, progress });
+  } catch (err) {
+    next(err);
+  }
+}
+
   }
 }

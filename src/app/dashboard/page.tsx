@@ -192,38 +192,81 @@ useEffect(() => {
   }, [loading]);
 
   /* ------------------- Schedule ------------------- */
-  async function generatePlan(e: React.FormEvent) {
-    e.preventDefault();
-    if (!userId) {
-      setError("Create a user first");
-      return;
-    }
-    setError(null);
-    setLoading(true);
-    setLoadingStage(0);
-    setGeneratedPlan([]);
-    
-    try {
-      const res = await fetch("http://localhost:5000/api/v1/schedules/generate", {
-        method: "POST",
-        headers: { "Content-Type": "application/json","Authorization": `Bearer ${token}` },
-        body: JSON.stringify({
-          topic: topicInput,
-          durationUnit,
-          durationValue,
-        }),
-      });
-      const data = await res.json();
-      if (!res.ok || !data.plan) throw new Error(data.error || "Failed to generate plan");
-      setGeneratedPlan(data.plan);
-    } catch (err: any) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
-      setLoadingStage(0);
-      setLoadingMessage("");
-    }
+async function generatePlan(e: React.FormEvent) {
+  e.preventDefault();
+  if (!userId) {
+    setError("Create a user first");
+    return;
   }
+
+  setError(null);
+  setLoading(true);
+  setGeneratedPlan([]);
+  setLoadingStage(0);
+
+  try {
+    // Step 1: Start generation
+    const res = await fetch("http://localhost:5000/api/v1/schedules/generate", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        topic: topicInput,
+        durationUnit,
+        durationValue,
+      }),
+    });
+
+    const data = await res.json();
+
+    if (!res.ok || !data.jobId || !data.statusUrl) {
+      throw new Error(data.error || "Failed to start schedule generation");
+    }
+
+    console.log("⏳ Schedule generation started, jobId:", data.jobId);
+
+    // Step 2: Poll for completion
+    const pollStatusUrl = `http://localhost:5000${data.statusUrl}`;
+    let attempts = 0;
+    const maxAttempts = 20;
+
+    while (attempts < maxAttempts) {
+      await new Promise((r) => setTimeout(r, 2000)); // wait 2s between checks
+
+      const statusRes = await fetch(pollStatusUrl, {
+        headers: { "Authorization": `Bearer ${token}` },
+      });
+
+      const statusData = await statusRes.json();
+
+      if (statusRes.ok && statusData.plan) {
+        console.log("✅ Plan ready:", statusData.plan);
+        setGeneratedPlan(statusData.plan);
+        setLoading(false);
+        return;
+      }
+
+      if (statusData.status === "failed") {
+        throw new Error(statusData.error || "Schedule generation failed");
+      }
+
+      attempts++;
+      console.log(`Waiting... (${attempts})`);
+    }
+
+    throw new Error("Timed out waiting for plan generation");
+  } catch (err: any) {
+    console.error("❌ Error generating plan:", err.message);
+    setError(err.message);
+  } finally {
+    setLoading(false);
+    setLoadingStage(0);
+    setLoadingMessage("");
+  }
+}
+
 
   async function saveGeneratedPlan() {
     if (!userId || !generatedPlan) return;

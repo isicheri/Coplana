@@ -15,5 +15,6 @@ scheduleRouter.post("/save",responseHandler(scheduleController.save));
 scheduleRouter.get("/personal",responseHandler(scheduleController.list));
 scheduleRouter.delete("/:scheduleId",responseHandler(scheduleController.delete));
 scheduleRouter.patch("/:scheduleId/reminders",responseHandler(scheduleController.updateReminders));
+scheduleRouter.get("/generation/status/:jobId", responseHandler(scheduleController.generationStatus))
 
 export default scheduleRouter;
