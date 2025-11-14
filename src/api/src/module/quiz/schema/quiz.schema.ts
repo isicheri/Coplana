@@ -8,7 +8,6 @@ const sanitize = (val: string) =>
   });
 
 export const startQuizSchema = z.object({
-  userId: z.string(),
   quizId: z.string()
 });
 

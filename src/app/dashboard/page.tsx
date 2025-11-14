@@ -395,7 +395,7 @@ async function generatePlan(e: React.FormEvent) {
       throw new Error(`Failed to fetch quiz history: ${response}`);
     }
     const data = await response.json();
-    console.log("user quiz history: ",data);
+    // console.log("user quiz history: ",data);
     return data;
   }
 
@@ -833,26 +833,69 @@ useEffect(() => {
     <button
       className="mt-3 w-full px-4 py-2 text-sm bg-purple-600 hover:bg-purple-700 text-white rounded-lg disabled:opacity-50 transition-colors"
       disabled={resumeLoader}
-      onClick={async () => {
-        setResumeLoader(true);
-        try {
-          const res = await fetch(`/api/quiz/attempts/${attempt.id}/resume`, {
-            method: "GET"
-          });
-          
-          if (!res.ok) throw new Error("Failed to resume quiz");
-          
-          const data = await res.json();
-          setSelectedQuizId(data.attempt.quizId);
-          setShowQuizModal(true);
-          
-        } catch (error) {
-          console.error("Resume failed:", error);
-          setError("Failed to resume quiz");
-        } finally {
-          setResumeLoader(false);
-        }
-      }}
+    onClick={async () => {
+  console.log("▶️ Resume button clicked");
+  console.log("attempt object:", attempt);
+  console.log("attempt.id:", attempt?.id);
+
+  if (!attempt) {
+    console.error("❌ attempt is undefined!");
+  }
+
+  setResumeLoader(true);
+
+  try {
+    console.log(`🌐 Sending request to /quiz/attempts/${attempt?.id}/resume`);
+
+    const res = await fetch(
+      `http://localhost:5000/api/v1/quiz/attempts/${attempt?.id}/resume`,
+      {
+        method: "POST",
+        headers: {
+          "Authorization": `Bearer ${token}`,
+        },
+      }
+    );
+
+    console.log("📩 Response status:", res.status);
+
+    if (!res.ok) {
+      const errText = await res.text();
+      console.error("❌ Backend returned non-OK:", errText);
+      throw new Error("Failed to resume quiz");
+    }
+
+    const data = await res.json();
+    console.log("📦 Raw response JSON:", data);
+
+    console.log("🔍 data.quizAttempt:", data?.quizAttempt);
+    console.log("🔍 data.quizAttempt.quizId:", data?.quizAttempt?.quizId);
+
+    if (!data.quizAttempt) {
+      console.error("❌ quizAttempt missing in response!");
+    }
+
+    if (!data.quizAttempt?.quizId) {
+      console.error("❌ quizAttempt.quizId is undefined!");
+    }
+
+    // Set the quizId
+    setSelectedQuizId(data.quizAttempt.quizId);
+    console.log("✅ setSelectedQuizId called with:", data.quizAttempt.quizId);
+
+    // Open the modal
+    setShowQuizModal(true);
+    console.log("📌 Modal opened");
+
+  } catch (error) {
+    console.error("❌ Resume failed:", error);
+    setError("Failed to resume quiz");
+  } finally {
+    console.log("⏳ Resume action completed");
+    setResumeLoader(false);
+  }
+}}
+
     >
       {resumeLoader ? "Loading..." : "📝 Resume Quiz"}
     </button>

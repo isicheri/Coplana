@@ -56,8 +56,14 @@ export default function QuizModal({ quizId, userId, onClose }: QuizModalProps) {
   const [elapsedTime, setElapsedTime] = useState<number>(0);
   const [error, setError] = useState<string | null>(null);
 
-  const [token,setToken] = useState<string | null>("");
-  
+  const [token,setToken] = useState<string | null>(null);
+
+  useEffect(() => {
+  const storedToken = localStorage.getItem("token");
+  if (storedToken) setToken(storedToken);
+}, []); // run only once
+
+
   // Timer effect - updates every second
   useEffect(() => {
     const timer = setInterval(() => {
@@ -67,20 +73,18 @@ export default function QuizModal({ quizId, userId, onClose }: QuizModalProps) {
     return () => clearInterval(timer);
   }, [startTime]);
 
-  useEffect(() => {
+ useEffect(() => {
+  if (token !== null && token !== "" && quizId) {
     startQuiz();
-  }, []);
+  }
+}, [token, quizId]);
 
-  
-  useEffect(() => {
-    const storedToken = localStorage.getItem("token");
-    if(!storedToken) return;
-    setToken(storedToken);
-  },[token])
+
 
   async function startQuiz() {
     try {
       setLoading(true);
+  
       const response = await fetch(`http://localhost:5000/api/v1/quiz/${quizId}/start`, {
         method: "POST",
         headers: { "Content-Type": "application/json",
@@ -158,6 +162,16 @@ export default function QuizModal({ quizId, userId, onClose }: QuizModalProps) {
     const secs = seconds % 60;
     return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
   }
+
+ if (token === null || token === "") {
+  return (
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+      <div className="bg-white rounded-3xl p-8 max-w-2xl w-full mx-4">
+        <p className="text-xl text-gray-600">Loading...</p>
+      </div>
+    </div>
+  );
+}
 
   if (loading) {
     return (

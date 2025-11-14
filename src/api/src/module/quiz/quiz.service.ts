@@ -14,7 +14,7 @@ export class QuizService {
         this.prisma = prisma
     }
 
-   async startQuiz({userId,quizId}: startQuizSchemaDto) {
+   async startQuiz(userId: string,{quizId}: startQuizSchemaDto) {
 
         const existingAttempt = await this.prisma.quizAttempt.findFirst({
              where: {

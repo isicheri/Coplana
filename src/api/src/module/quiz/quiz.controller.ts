@@ -110,7 +110,7 @@ export const quizController = (quizService: QuizService,quizAttemtService: QuizA
     }
 
     const { quizId } = parsed.data;
-    const attempt = await quizService.startQuiz({ userId, quizId });
+    const attempt = await quizService.startQuiz(userId,{quizId });
 
     return res.status(200).json(attempt);
   } catch (error) {
