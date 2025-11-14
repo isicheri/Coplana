@@ -232,29 +232,29 @@ async function generatePlan(e: React.FormEvent) {
     let attempts = 0;
     const maxAttempts = 20;
 
-    while (attempts < maxAttempts) {
-      await new Promise((r) => setTimeout(r, 2000)); // wait 2s between checks
+   while (attempts < maxAttempts) {
+  await new Promise((r) => setTimeout(r, 2000));
 
-      const statusRes = await fetch(pollStatusUrl, {
-        headers: { "Authorization": `Bearer ${token}` },
-      });
+  const statusRes = await fetch(pollStatusUrl, {
+    headers: { "Authorization": `Bearer ${token}` },
+  });
 
-      const statusData = await statusRes.json();
+  const statusData = await statusRes.json();
 
-      if (statusRes.ok && statusData.plan) {
-        console.log("✅ Plan ready:", statusData.plan);
-        setGeneratedPlan(statusData.plan);
-        setLoading(false);
-        return;
-      }
+  if (statusRes.ok && statusData.status === "completed" && statusData.plan) {
+    console.log("✅ Plan ready:", statusData.plan);
+    setGeneratedPlan(statusData.plan);
+    setLoading(false);
+    return;
+  }
 
-      if (statusData.status === "failed") {
-        throw new Error(statusData.error || "Schedule generation failed");
-      }
+  if (statusData.status === "failed") {
+    throw new Error(statusData.error || "Schedule generation failed");
+  }
 
-      attempts++;
-      console.log(`Waiting... (${attempts})`);
-    }
+  attempts++;
+  console.log(`Waiting... (${attempts})`);
+}
 
     throw new Error("Timed out waiting for plan generation");
   } catch (err: any) {
@@ -273,9 +273,9 @@ async function generatePlan(e: React.FormEvent) {
     setError(null);
     setSavingSchedule(true);
     try {
-      const res = await fetch("http://localhost:5000/api/v1/api/schedules/save", {
+      const res = await fetch("http://localhost:5000/api/v1/schedules/save", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json",  "Authorization": `Bearer ${token}` },
         body: JSON.stringify({
           userId,
           title: `${topicInput} Plan`,

@@ -7,7 +7,7 @@ export enum QueueName {
   REMINDERS = 'reminders',
   ANALYTICS = 'analytics',
   EMAIL = 'email',
-  Schedule = 'schedule'
+  Schedule = 'schedule-generation'
 }
 
 export interface ScheduleGenerationJobData {

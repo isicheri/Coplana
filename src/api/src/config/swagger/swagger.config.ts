@@ -97,6 +97,7 @@ const swaggerDefinition: SwaggerDefinition = {
       },
     },
   },
+  security: [{ bearerAuth: [] }],
   tags: [
     {
       name: 'Authentication',

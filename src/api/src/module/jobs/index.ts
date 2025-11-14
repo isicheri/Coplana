@@ -2,6 +2,8 @@ import { quizWorker } from "./quiz/quiz.processor.js";
 import { reminderWorker } from "./reminder/reminder.processor.js";
 import { analyticsWorker } from "./analytic/analytics.processor.js";
 import { emailWorker } from "./emails/email.processor.js";
+import { scheduleGenerationWorker } from './schedule/schedule-generation.worker.js';
+
 
 export const startWorkers = () => {
   console.log('🚀 Starting BullMQ workers...');
@@ -20,6 +22,7 @@ process.on('SIGTERM', async () => {
     reminderWorker.close(),
     analyticsWorker.close(),
     emailWorker.close(),
+    scheduleGenerationWorker.close()
   ]);
   console.log('✅ Workers closed');
 });
