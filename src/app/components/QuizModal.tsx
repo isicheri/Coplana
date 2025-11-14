@@ -56,13 +56,14 @@ export default function QuizModal({ quizId, userId, onClose }: QuizModalProps) {
   const [elapsedTime, setElapsedTime] = useState<number>(0);
   const [error, setError] = useState<string | null>(null);
 
-  const [token,setToken] = useState<string | null>(null);
+  const [token, setToken] = useState<string | null>(null);
+  const [hasStarted, setHasStarted] = useState(false); // Track if we've already called startQuiz
 
   useEffect(() => {
-  const storedToken = localStorage.getItem("token");
-  if (storedToken) setToken(storedToken);
-}, []); // run only once
-
+    const storedToken = localStorage.getItem("token");
+    console.log("📦 Token from localStorage:", storedToken);
+    if (storedToken) setToken(storedToken);
+  }, []);
 
   // Timer effect - updates every second
   useEffect(() => {
@@ -73,31 +74,52 @@ export default function QuizModal({ quizId, userId, onClose }: QuizModalProps) {
     return () => clearInterval(timer);
   }, [startTime]);
 
- useEffect(() => {
-  if (token !== null && token !== "" && quizId) {
-    startQuiz();
-  }
-}, [token, quizId]);
-
-
+  useEffect(() => {
+    console.log("🔄 Effect triggered - token:", token, "quizId:", quizId, "hasStarted:", hasStarted);
+    
+    if (token && quizId && !hasStarted) {
+      console.log("✅ Calling startQuiz()");
+      startQuiz();
+    }
+  }, [token, quizId, hasStarted]);
 
   async function startQuiz() {
+    console.log("🚀 startQuiz called with quizId:", quizId);
+    
     try {
       setLoading(true);
-  
+      setHasStarted(true); // Prevent calling again
+      
+      console.log("📡 Making API call to:", `http://localhost:5000/api/v1/quiz/${quizId}/start`);
+      
       const response = await fetch(`http://localhost:5000/api/v1/quiz/${quizId}/start`, {
         method: "POST",
-        headers: { "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}`
-         },
+        headers: { 
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        },
       });
 
-      if (!response.ok) throw new Error("Failed to start quiz");
+      console.log("📨 Response status:", response.status);
+      console.log("📨 Response ok:", response.ok);
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error("❌ API Error:", errorText);
+        throw new Error(`Failed to start quiz: ${errorText}`);
+      }
 
       const data = await response.json();
-      setAttempt(data.attempt);
+      console.log("✅ Quiz data received:", data);
+      
+      // Backend returns either { attempt } or the attempt directly
+      const attemptData = data.attempt || data.quizAttempt || data;
+      console.log("✅ Attempt data:", attemptData);
+      
+      setAttempt(attemptData);
       setStartTime(Date.now());
     } catch (err: any) {
+      console.error("❌ Error in startQuiz:", err);
       setError(err.message);
     } finally {
       setLoading(false);
@@ -125,7 +147,7 @@ export default function QuizModal({ quizId, userId, onClose }: QuizModalProps) {
 
     try {
       setSubmitting(true);
-      const timeTaken = elapsedTime; // Use the tracked elapsed time
+      const timeTaken = elapsedTime;
 
       const answers = attempt.quiz.questions.map((q) => ({
         questionId: q.id,
@@ -134,9 +156,10 @@ export default function QuizModal({ quizId, userId, onClose }: QuizModalProps) {
 
       const response = await fetch(`http://localhost:5000/api/v1/quiz/${quizId}/submit`, {
         method: "POST",
-        headers: { "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}`
-         },
+        headers: { 
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        },
         body: JSON.stringify({
           attemptId: attempt.id,
           answers,
@@ -163,16 +186,6 @@ export default function QuizModal({ quizId, userId, onClose }: QuizModalProps) {
     return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
   }
 
- if (token === null || token === "") {
-  return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-      <div className="bg-white rounded-3xl p-8 max-w-2xl w-full mx-4">
-        <p className="text-xl text-gray-600">Loading...</p>
-      </div>
-    </div>
-  );
-}
-
   if (loading) {
     return (
       <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
@@ -180,6 +193,9 @@ export default function QuizModal({ quizId, userId, onClose }: QuizModalProps) {
           <div className="flex flex-col items-center gap-4">
             <Image src="/loader.svg" width={40} height={40} alt="" className="spinner" />
             <p className="text-xl text-gray-600">Loading quiz...</p>
+            {error && (
+              <p className="text-red-500 text-sm mt-2">{error}</p>
+            )}
           </div>
         </div>
       </div>
@@ -203,7 +219,21 @@ export default function QuizModal({ quizId, userId, onClose }: QuizModalProps) {
     );
   }
 
-  if (!attempt) return null;
+  if (!attempt) {
+    return (
+      <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+        <div className="bg-white rounded-3xl p-8 max-w-2xl w-full mx-4">
+          <p className="text-xl text-gray-600">No quiz data available</p>
+          <button
+            onClick={onClose}
+            className="mt-4 px-6 py-2 bg-gray-500 text-white rounded-full hover:bg-gray-600"
+          >
+            Close
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   if (showResults) {
     const passed = attempt.percentage >= 70;
@@ -283,6 +313,7 @@ export default function QuizModal({ quizId, userId, onClose }: QuizModalProps) {
                 setShowResults(false);
                 setUserAnswers({});
                 setCurrentQuestionIndex(0);
+                setHasStarted(false); // Reset so we can start again
                 startQuiz();
               }}
               className="flex-1 px-6 py-3 bg-gray-500 text-white rounded-full hover:bg-gray-600 font-semibold"

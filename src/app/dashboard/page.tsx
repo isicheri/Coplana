@@ -84,8 +84,8 @@ const PROGRESS_STAGES = [
 export default function StudyPlannerApp() {
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
-  const [userId, setUserId] = useState<string | null>("");
-  const [token,setToken] = useState<string | null>("");
+ const [userId, setUserId] = useState<string | null>(null);
+  const [token,setToken] = useState<string | null>(null);
 
 
   const [topicInput, setTopicInput] = useState("");
@@ -136,7 +136,7 @@ const [loadingMore, setLoadingMore] = useState(false);
 useEffect(() => {
   const token = localStorage.getItem("token");
   setToken(token)
-},[token])
+},[])
 
   function getRandomTopic() {
     const randomIndex = Math.floor(Math.random() * studyTopics.length);
@@ -908,32 +908,17 @@ useEffect(() => {
 )}
 
 {/* Quiz Modal - Move OUTSIDE the tab conditional */}
-{showQuizModal && selectedQuizId && userId && (
+{showQuizModal && selectedQuizId && (
   <QuizModal
     quizId={selectedQuizId}
-    userId={userId}
+    userId={userId!} // non-null assertion
     onClose={() => {
       setShowQuizModal(false);
       setSelectedQuizId(null);
-      // Refresh quiz history after closing
-      if (userId) {
-        fetchUserQuizHistory().then(data => setUserQuizzes(data));
-      }
+      fetchUserQuizHistory().then(data => setUserQuizzes(data));
     }}
   />
 )}
-
-            {/* Quiz Modal */}
-                {showQuizModal && selectedQuizId && userId && (
-                  <QuizModal
-                    quizId={selectedQuizId}
-                    userId={userId}
-                    onClose={() => {
-                      setShowQuizModal(false);
-                      setSelectedQuizId(null);
-                    }}
-                  />
-                )}
         </div>
       </div>
     </main>
